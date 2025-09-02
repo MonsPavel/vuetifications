@@ -35,48 +35,5 @@ const filteredByPosition = (pos: string) => {
 </template>
 
 <style scoped>
-.notifications-container {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 9999;
-}
 
-/* Positions */
-.notifications-container--top-left { top: 20px; left: 20px; align-items: flex-start; }
-.notifications-container--top-right { top: 20px; right: 20px; align-items: flex-end; }
-.notifications-container--bottom-left { bottom: 20px; left: 20px; align-items: flex-start; }
-.notifications-container--bottom-right { bottom: 20px; right: 20px; align-items: flex-end; }
-
-.notification {
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  min-width: 250px;
-  max-width: 300px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.notification--success { border-left: 5px solid #4caf50; }
-.notification--error { border-left: 5px solid #f44336; }
-.notification--info { border-left: 5px solid #2196f3; }
-.notification--warning { border-left: 5px solid #ff9800; }
-
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-enter-from, .slide-fade-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
-.close {
-  background: transparent;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-}
 </style>
