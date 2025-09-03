@@ -24,8 +24,8 @@ const filteredByPosition = (pos: string) => {
           :class="`notification--${n.type}`"
         >
           <div class="notification-content">
-            <strong v-if="n.title">{{ n.title }}</strong>
-            <p>{{ n.message }}</p>
+            <div v-if="n.title" class="notification-title">{{ n.title }}</div>
+            <div class="notification-message">{{ n.message }}</div>
           </div>
           <!-- <button class="close" @click="store.remove(n.id)">✕</button> -->
         </div>
