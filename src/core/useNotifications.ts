@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-import type { NotificationType, NotificationPosition, Notification } from '../types/notifications'
+import type { Notification } from '../types/notifications'
 
 const notifications = ref<Notification[]>([]);
 let seed = 0;
