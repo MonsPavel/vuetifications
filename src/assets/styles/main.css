@@ -1,16 +1,15 @@
 :root {
-  --notification-bg: #fff;
-  --notification-color: #000;
-  --notification-radius: 8px;
-  --notification-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --notification-color: #fff;
+  --notification-radius: 10px;
+  --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
 
-  --notification-success: #4caf50;
-  --notification-error: #f44336;
-  --notification-info: #2196f3;
-  --notification-warning: #ff9800;
+  --notification-success: #4CAF50;
+  --notification-error: #E85963FF;
+  --notification-info: #2196F3;
+  --notification-warning: #FDF4F2FF;
 
-  --notification-padding: 10px 15px;
-  --notification-width: 300px;
+  --notification-padding: 16px;
+  --notification-width: 320px;
   --notification-z-index: 9999;
 }
 
@@ -29,7 +28,6 @@
 .notifications-container--bottom-right { bottom: 20px; right: 20px; align-items: flex-end; }
 
 .notification {
-  background: var(--notification-bg);
   color: var(--notification-color);
   padding: var(--notification-padding);
   border-radius: var(--notification-radius);
@@ -42,10 +40,10 @@
   margin-bottom: 10px;
 }
 
-.notification--success { border-left: 5px solid var(--notification-success); }
-.notification--error { border-left: 5px solid var(--notification-error); }
-.notification--info { border-left: 5px solid var(--notification-info); }
-.notification--warning { border-left: 5px solid var(--notification-warning); }
+.notification--success { background: var(--notification-success); }
+.notification--error { background: var(--notification-error); }
+.notification--info { background: var(--notification-info); }
+.notification--warning { background: var(--notification-warning); }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
   transition: all 0.3s ease;

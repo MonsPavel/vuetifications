@@ -27,7 +27,7 @@ const filteredByPosition = (pos: string) => {
             <strong v-if="n.title">{{ n.title }}</strong>
             <p>{{ n.message }}</p>
           </div>
-          <button class="close" @click="store.remove(n.id)">✕</button>
+          <!-- <button class="close" @click="store.remove(n.id)">✕</button> -->
         </div>
       </transition-group>
     </div>
