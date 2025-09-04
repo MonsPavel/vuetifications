@@ -9,10 +9,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Для создания tags и releases
-      issues: write    # Для комментирования issues
-      pull-requests: write  # Для комментирования PR
-      packages: write  # Для публикации пакетов
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
 
     steps:
       - name: Checkout
@@ -32,10 +32,14 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Setup npm authentication
+      - name: Setup npm with Automation token
         run: |
+          # Очищаем старые конфиги
+          rm -f ~/.npmrc
+          # Создаем новый с Automation token
           echo "registry=https://registry.npmjs.org/" > ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
 
       - name: Release
         env:
