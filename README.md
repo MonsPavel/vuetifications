@@ -1,57 +1,56 @@
 # Vuetifications
 
-> 🔔 Лёгкая и красивая библиотека уведомлений для Vue 3.
+> 🔔 A lightweight and beautiful notification library for Vue 3.
 
 ![npm](https://img.shields.io/npm/v/vuetifications.svg)
-[![npm version](https://img.shields.io/npm/v/your-package-name/beta?color=blue&label=beta&logo=npm)](https://www.npmjs.com/package/vuetifications)
-[![beta](https://img.shields.io/badge/status-beta-important)](https://github.com/vuetifications/branches)
+![npm downloads](https://img.shields.io/npm/dm/vuetifications.svg)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/your-username/vuetifications/ci.yml?branch=main)
 ![License](https://img.shields.io/npm/l/vuetifications.svg)
-![Downloads](https://img.shields.io/npm/dm/vuetifications.svg)
 
 ---
 
-## ✨ Возможности
+## ✨ Features
 
-- 🎨 Красивые анимации и темы (CSS variables)
-- ⚡️ Быстрая интеграция в любой проект Vue 3
-- 🧩 Простой API через функцию `notify()`
-- 🎛️ Позиции, иконки, длительность
-- 🪶 Минимум зависимостей
+- 🎨 Beautiful animations and themes (CSS variables)
+- ⚡️ Quick integration with any Vue 3 project
+- 🧩 Simple API with `notify()` function
+- 🎛️ Positions, icons, duration customization
+- 🪶 Minimal dependencies
 
 ---
 
-## 📦 Установка
+## 📦 Installation
 
 ```bash
 npm install vuetifications
-# или
+# or
 yarn add vuetifications
-# или
+# or
 pnpm add vuetifications
 ```
 
 ---
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
 ```ts
 // main.ts
 import { createApp } from 'vue'
 import App from './App.vue'
 
-// если стили идут отдельным файлом:
+// if styles are in a separate file:
 import 'vuetifications/styles/notifications.css'
 
 createApp(App).mount('#app')
 ```
 
 ```ts
-// любой компонент
+// inside any component
 import { notify } from 'vuetifications'
 
 notify({
-  title: 'Успех!',
-  message: 'Это уведомление работает!',
+  title: 'Success!',
+  message: 'This notification works!',
   type: 'success',
   position: 'top-right',
   duration: 3000
@@ -73,7 +72,7 @@ interface NotifyOptions {
   message: string
   type?: NotificationType           // default: 'info'
   position?: NotificationPosition   // default: 'top-right'
-  duration?: number                 // default: 3000 (ms), 0 — не автозакрывать
+  duration?: number                 // default: 3000 (ms), 0 — never auto-close
 }
 
 notify(options: NotifyOptions): void
@@ -81,55 +80,68 @@ notify(options: NotifyOptions): void
 
 ---
 
-## ⚙️ Опции
+## ⚙️ Configuration
 
-| Опция      | Тип                                                                                       | По умолчанию  | Описание                                |
-|------------|--------------------------------------------------------------------------------------------|---------------|-----------------------------------------|
-| `title`    | `string`                                                                                   | `''`          | Заголовок уведомления                   |
-| `message`  | `string`                                                                                   | `''`          | Текст уведомления                       |
-| `type`     | `'success' \| 'error' \| 'info' \| 'warning'`                                          | `'info'`      | Тип уведомления                         |
-| `position` | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                         | `'top-right'` | Позиция появления                       |
-| `duration` | `number`                                                                                   | `3000`        | Время жизни (мс). `0` — без автозакрытия |
+You can configure global settings using `configureNotifications`.
+
+```ts
+import { configureNotifications, notify } from 'vuetifications'
+
+configureNotifications({ maxNotifications: 10 })
+
+notify({ message: 'Now you can show up to 10 notifications!' })
+```
 
 ---
 
-## 🎨 Темизация (CSS Variables)
+## ⚙️ Options
 
-Библиотека использует CSS-переменные. Переопредели их глобально или на контейнере темы.
+| Option      | Type                                                                                       | Default       | Description                              |
+|-------------|--------------------------------------------------------------------------------------------|---------------|------------------------------------------|
+| `title`     | `string`                                                                                   | `''`          | Notification title                       |
+| `message`   | `string`                                                                                   | `''`          | Notification message                     |
+| `type`      | `'success' \| 'error' \| 'info' \| 'warning'`                                           | `'info'`      | Notification type                        |
+| `position`  | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                          | `'top-right'` | Notification position                    |
+| `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `0` — disables auto-close |
+
+---
+
+## 🎨 Theming (CSS Variables)
+
+Vuetifications uses CSS variables. Override them globally or per theme container.
 
 ```css
 :root {
-  --notification-bg: #fff;
-  --notification-color: #000;
-  --notification-radius: 8px;
-  --notification-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  --notification-color: #fff;
+  --notification-radius: 10px;
+  --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
 
-  --notification-success: #4caf50;
-  --notification-error: #f44336;
-  --notification-info: #2196f3;
-  --notification-warning: #ff9800;
+  --notification-success: #4CAF50;
+  --notification-error: #E85963FF;
+  --notification-info: #2196F3;
+  --notification-warning: #FDF4F2FF;
 
-  --notification-padding: 10px 15px;
-  --notification-width: 300px;
+  --notification-padding: 16px;
+  --notification-width: 320px;
   --notification-z-index: 9999;
 }
 ```
 
 ---
 
-## 🖼 Иконки
+## 🖼 Icons
 
-По умолчанию используются встроенные SVG, цвет которых синхронизирован с переменными типа:
+By default, built-in SVG icons are used, and their colors sync with type variables:
 
 - `--notification-success`
 - `--notification-error`
 - `--notification-info`
 - `--notification-warning`
 
-Пример переопределения стилей:
+Example of style override:
 
 ```css
-/* пример: скругления и шрифт */
+/* Example: custom border radius and font */
 .notification {
   border-radius: 12px;
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -138,39 +150,58 @@ notify(options: NotifyOptions): void
 
 ---
 
-## 📍 Позиционирование
+## 📍 Positioning
 
 ```ts
 notify({ message: 'Top left', position: 'top-left' })
 notify({ message: 'Bottom right', position: 'bottom-right' })
 ```
 
-Позиции: `top-left`, `top-right`, `bottom-left`, `bottom-right`.
+Available positions: `top-left`, `top-right`, `bottom-left`, `bottom-right`.
 
 ---
 
+## 🚀 CI/CD & Releases
+
+This package uses **GitHub Actions** + **release-please** for automated releases.
+
+- On each push to `main`, CI runs: **lint, test, build, security scan**
+- When a commit follows [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add new option`), release-please will:
+  - Update version
+  - Generate changelog
+  - Create GitHub Release
+  - Publish to **npm**
+
+Example commits:
+```bash
+feat: add dark theme support        # → minor release
+fix: fix animation bug              # → patch release
+feat!: drop Vue 2 support           # → major release
+```
+
 ---
 
-## 🧩 Совместимость
+## 🧩 Compatibility
 
 - Vue **3.x**
-- TypeScript поддерживается из коробки
+- TypeScript support out of the box
 
 ---
 
-## 🤝 Вклад
+## 🤝 Contributing
 
-PR и идеи приветствуются!  
-Если нашёл баг или хочешь предложить фичу — открой issue.
+PRs and ideas are welcome!  
+If you found a bug or want to suggest a feature — open an issue.
 
 ---
 
-## 📜 Лицензия
+## 📜 License
 
 [MIT](./LICENSE)
 
 ---
 
-## ⭐️ Поддержка
+## ⭐️ Support
 
-Если библиотека понравилась — поставь ⭐ на GitHub. Это мотивирует развивать проект дальше!
+If you like this library — give it a ⭐ on GitHub.  
+Your support motivates further development!
