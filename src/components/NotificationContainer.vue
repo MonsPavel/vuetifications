@@ -16,7 +16,10 @@ const filteredByPosition = (pos: string) => {
       class="notifications-container"
       :class="`notifications-container--${pos}`"
     >
-      <transition-group name="slide-fade" tag="div">
+      <transition-group
+        name="slide-fade"
+        tag="div"
+      >
         <div
           v-for="n in filteredByPosition(pos)"
           :key="n.id"
@@ -24,8 +27,15 @@ const filteredByPosition = (pos: string) => {
           :class="`notification--${n.type}`"
         >
           <div class="notification-content">
-            <div v-if="n.title" class="notification-title">{{ n.title }}</div>
-            <div class="notification-message">{{ n.message }}</div>
+            <div
+              v-if="n.title"
+              class="notification-title"
+            >
+              {{ n.title }}
+            </div>
+            <div class="notification-message">
+              {{ n.message }}
+            </div>
           </div>
           <!-- <button class="close" @click="store.remove(n.id)">✕</button> -->
         </div>
@@ -34,6 +44,4 @@ const filteredByPosition = (pos: string) => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
