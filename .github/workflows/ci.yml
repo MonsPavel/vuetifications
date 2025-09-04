@@ -20,19 +20,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: pnpm install
+        run: npm ci --force
 
       - name: Run Linter
-        run: pnpm run lint
+        run: npm run lint
 
       - name: Build Package
-        run: pnpm run build
+        run: npm run build
 
   # --- Security: уязвимости, статический анализ и секреты ---
   security-scan:
@@ -47,17 +44,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: pnpm install
+        run: npm ci --force
 
       # Проверка зависимостей на уязвимости
       - name: NPM Audit (prod dependencies only)
-        run: pnpm audit --audit-level=high --omit=dev
+        run: npm audit --audit-level=high --omit=dev
 
       # CodeQL анализ (инициализация)
       - name: Initialize CodeQL
