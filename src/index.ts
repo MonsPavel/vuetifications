@@ -1,4 +1,4 @@
 export { notify } from './plugin';
-export type { NotificationType } from './types/notifications';
+export type { NotificationType, NotificationOptions } from './types/notifications';
 
 import './assets/styles/main.css';
