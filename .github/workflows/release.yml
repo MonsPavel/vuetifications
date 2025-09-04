@@ -8,24 +8,34 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Для создания tags и releases
+      issues: write    # Для комментирования issues
+      pull-requests: write  # Для комментирования PR
+      packages: write  # Для публикации пакетов
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build package
         run: npm run build
+
+      - name: Setup npm authentication
+        run: |
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Release
         env:
