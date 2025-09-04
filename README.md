@@ -2,10 +2,9 @@
 
 > 🔔 A lightweight and beautiful notification library for Vue 3.
 
-![npm](https://img.shields.io/npm/v/vuetifications.svg)
-![npm downloads](https://img.shields.io/npm/dm/vuetifications.svg)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/your-username/vuetifications/ci.yml?branch=main)
-![License](https://img.shields.io/npm/l/vuetifications.svg)
+[![npm-version](https://badgen.net/npm/v/vuetifications)](https://www.npmjs.com/package/vuetifications)
+[![license](https://badgen.net/github/license/MonsPavel/vuetifications)]
+![TypeScript](https://badgen.net/badge/icon/Typed?icon=typescript&label&labelColor=blue&color=555555)
 
 ---
 
