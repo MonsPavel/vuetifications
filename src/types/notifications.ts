@@ -8,6 +8,7 @@ export interface Notification {
   type?: NotificationType;
   duration?: number;
   position?: NotificationPosition;
+  icon?: string;
 }
 
 export interface NotificationOptions {
@@ -16,4 +17,5 @@ export interface NotificationOptions {
   type?: NotificationType;
   duration?: number;
   position?: NotificationPosition;
+  icon?: string;
 }

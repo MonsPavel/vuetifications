@@ -41,6 +41,36 @@ export const Error: Story = {
   }),
 };
 
+export const Info: Story = {
+  render: () => ({
+    template: `<button @click="show">Show Info</button>`,
+    setup() {
+      const show = () =>
+        notify({
+          title: 'Info',
+          message: 'Information',
+          type: 'info',
+        });
+      return { show };
+    },
+  }),
+};
+
+export const Warning: Story = {
+  render: () => ({
+    template: `<button @click="show">Show Warning</button>`,
+    setup() {
+      const show = () =>
+        notify({
+          title: 'Warning',
+          message: 'Warning!',
+          type: 'warning',
+        });
+      return { show };
+    },
+  }),
+};
+
 export const Positioned: Story = {
   render: () => ({
     template: `<div class="flex gap-2">

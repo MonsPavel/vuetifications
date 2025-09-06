@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { notificationStore as store } from '../core/useNotifications';
 
+import { getIcon } from '../utils/icons'
+
 const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
 const filteredByPosition = (pos: string) => {
@@ -26,6 +28,12 @@ const filteredByPosition = (pos: string) => {
           class="notification"
           :class="`notification--${n.type}`"
         >
+          <img
+            v-if="getIcon(n)"
+            :src="getIcon(n)"
+            class="notification-icon"
+            alt="icon"
+          >
           <div class="notification-content">
             <div
               v-if="n.title"

@@ -2,8 +2,6 @@
 
 > 🔔 A lightweight and beautiful notification library for Vue 3.
 
-[![npm-version](https://badgen.net/npm/v/vuetifications)](https://www.npmjs.com/package/vuetifications)
-[![license](https://badgen.net/github/license/MonsPavel/vuetifications)]
 ![TypeScript](https://badgen.net/badge/icon/Typed?icon=typescript&label&labelColor=blue&color=555555)
 
 ---
@@ -79,20 +77,6 @@ notify(options: NotifyOptions): void
 
 ---
 
-## ⚙️ Configuration
-
-You can configure global settings using `configureNotifications`.
-
-```ts
-import { configureNotifications, notify } from 'vuetifications'
-
-configureNotifications({ maxNotifications: 10 })
-
-notify({ message: 'Now you can show up to 10 notifications!' })
-```
-
----
-
 ## ⚙️ Options
 
 | Option      | Type                                                                                       | Default       | Description                              |
@@ -112,6 +96,7 @@ Vuetifications uses CSS variables. Override them globally or per theme container
 ```css
 :root {
   --notification-color: #fff;
+  --notification-color-second: #000;
   --notification-radius: 10px;
   --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
 
@@ -127,15 +112,6 @@ Vuetifications uses CSS variables. Override them globally or per theme container
 ```
 
 ---
-
-## 🖼 Icons
-
-By default, built-in SVG icons are used, and their colors sync with type variables:
-
-- `--notification-success`
-- `--notification-error`
-- `--notification-info`
-- `--notification-warning`
 
 Example of style override:
 
@@ -157,26 +133,6 @@ notify({ message: 'Bottom right', position: 'bottom-right' })
 ```
 
 Available positions: `top-left`, `top-right`, `bottom-left`, `bottom-right`.
-
----
-
-## 🚀 CI/CD & Releases
-
-This package uses **GitHub Actions** + **release-please** for automated releases.
-
-- On each push to `main`, CI runs: **lint, test, build, security scan**
-- When a commit follows [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add new option`), release-please will:
-  - Update version
-  - Generate changelog
-  - Create GitHub Release
-  - Publish to **npm**
-
-Example commits:
-```bash
-feat: add dark theme support        # → minor release
-fix: fix animation bug              # → patch release
-feat!: drop Vue 2 support           # → major release
-```
 
 ---
 
