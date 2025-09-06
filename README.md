@@ -67,6 +67,7 @@ type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-r
 interface NotifyOptions {
   title?: string
   message: string
+  icon?: string
   type?: NotificationType           // default: 'info'
   position?: NotificationPosition   // default: 'top-right'
   duration?: number                 // default: 3000 (ms), 0 — never auto-close
