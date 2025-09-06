@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/MonsPavel/vuetifications/compare/v1.1.0...v1.1.1) (2025-09-06)
+
+### Bug Fixes
+
+* readme ([43241dd](https://github.com/MonsPavel/vuetifications/commit/43241dd7f6b053c2a449366f3c69a2f0456a529e))
+
 ## [1.1.0](https://github.com/MonsPavel/vuetifications/compare/v1.0.0...v1.1.0) (2025-09-06)
 
 ### Features
