@@ -4,6 +4,12 @@
 
 * add icons support ([7579546](https://github.com/MonsPavel/vuetifications/commit/757954655506869b18ca6869ffcd97caf7ac0422))
 
+## [1.1.0](https://github.com/MonsPavel/vuetifications/compare/v1.0.0...v1.1.0) (2025-09-06)
+
+### Features
+
+* add icons support ([7579546](https://github.com/MonsPavel/vuetifications/commit/757954655506869b18ca6869ffcd97caf7ac0422))
+
 ## 1.0.0 (2025-09-05)
 
 ### ⚠ BREAKING CHANGES
