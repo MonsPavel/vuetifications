@@ -104,3 +104,30 @@ export const Positioned: Story = {
     },
   }),
 };
+
+export const Closable: Story = {
+  render: () => ({
+    template: `<div class="flex gap-2">
+      <button @click="closable" style="margin-right: 10px">closable</button>
+      <button @click="zeroDuration">zeroDuration</button>
+    </div>`,
+    setup() {
+      const closable = () =>
+        notify({
+          message: 'This is closable notification, duration 1 min',
+          position: 'top-left',
+          closable: true,
+          duration: 60000,
+          type: 'warning',
+        });
+      const zeroDuration = () =>
+        notify({
+          title: 'zeroDuration',
+          message: 'This notification can close only by click. This notification can close only by click. This notification can close only by click.',
+          position: 'top-left',
+          duration: 0
+        });
+      return { closable, zeroDuration };
+    },
+  }),
+};

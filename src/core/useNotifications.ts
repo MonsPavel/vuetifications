@@ -13,6 +13,7 @@ export function useNotifications() {
       type: 'info',
       duration: 3000,
       position: 'top-right',
+      closable: false,
       ...options
     };
     notifications.value.push(n);

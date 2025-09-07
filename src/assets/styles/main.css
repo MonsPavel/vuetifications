@@ -9,7 +9,7 @@
   --notification-info: #2196F3;
   --notification-warning: #FDF4F2FF;
 
-  --notification-padding: 16px;
+  --notification-padding: 24px;
   --notification-width: 320px;
   --notification-z-index: 9999;
 }
@@ -29,10 +29,10 @@
 .notifications-container--bottom-right { bottom: 20px; right: 20px; align-items: flex-end; }
 
 .notification {
+  position: relative;
   padding: var(--notification-padding);
   border-radius: var(--notification-radius);
-  min-width: 250px;
-  max-width: var(--notification-width);
+  width: var(--notification-width);
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -62,6 +62,16 @@
 .notification--info { background: var(--notification-info); color: var(--notification-color); }
 .notification--warning { background: var(--notification-warning); color: var(--notification-color-second); }
 
+.notification--success .close,
+.notification--error .close,
+.notification--info .close {
+  color: var(--notification-color);
+}
+
+.notification--warning .close {
+  color: var(--notification-color-second);
+}
+
 .slide-fade-enter-active, .slide-fade-leave-active {
   transition: all 0.3s ease;
 }
@@ -71,6 +81,9 @@
 }
 
 .close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
   background: transparent;
   border: none;
   font-size: 14px;

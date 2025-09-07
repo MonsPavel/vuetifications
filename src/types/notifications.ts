@@ -9,6 +9,7 @@ export interface Notification {
   duration?: number;
   position?: NotificationPosition;
   icon?: string;
+  closable?: boolean;
 }
 
 export interface NotificationOptions {
@@ -18,4 +19,5 @@ export interface NotificationOptions {
   duration?: number;
   position?: NotificationPosition;
   icon?: string;
+  closable?: boolean;
 }
