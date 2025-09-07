@@ -71,6 +71,7 @@ interface NotifyOptions {
   type?: NotificationType           // default: 'info'
   position?: NotificationPosition   // default: 'top-right'
   duration?: number                 // default: 3000 (ms), 0 — never auto-close
+  closable?: boolean                // default: false
 }
 
 notify(options: NotifyOptions): void
@@ -87,6 +88,7 @@ notify(options: NotifyOptions): void
 | `type`      | `'success' \| 'error' \| 'info' \| 'warning'`                                           | `'info'`      | Notification type                        |
 | `position`  | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                          | `'top-right'` | Notification position                    |
 | `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `0` — disables auto-close |
+| `closable`  | `boolean`                                                                                   | `false`        | Show/Hide close btn                         |
 
 ---
 
