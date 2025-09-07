@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/MonsPavel/vuetifications/compare/v1.1.1...v1.2.0) (2025-09-07)
+
+### Features
+
+* closable notifications ([d8d897a](https://github.com/MonsPavel/vuetifications/commit/d8d897afb52ba303bb861732b029a08abe7f7bf1))
+
 ## [1.1.1](https://github.com/MonsPavel/vuetifications/compare/v1.1.0...v1.1.1) (2025-09-06)
 
 ### Bug Fixes
