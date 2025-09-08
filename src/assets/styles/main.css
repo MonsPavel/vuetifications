@@ -1,6 +1,6 @@
 :root {
   --notification-color: #fff;
-  --notification-color-second: #000;
+  --notification-color-second: #171a1f;
   --notification-radius: 10px;
   --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
 
@@ -39,22 +39,24 @@
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
-.notification-icon {
+.notification__icon {
   align-self: start;
   margin-right: 16px;
 }
 
-.notification-title {
+.notification__title {
   font-size: 16px; 
   line-height: 24px; 
   font-weight: 600;
+  margin: 0 0 10px 0;
 }
 
-.notification-message {
+.notification__message {
   font-size: 14px; 
   line-height: 20px; 
   font-weight: 400; 
   font-family: 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  margin: 0;
 }
 
 .notification--success { background: var(--notification-success); color: var(--notification-color); }
@@ -62,13 +64,13 @@
 .notification--info { background: var(--notification-info); color: var(--notification-color); }
 .notification--warning { background: var(--notification-warning); color: var(--notification-color-second); }
 
-.notification--success .close,
-.notification--error .close,
-.notification--info .close {
+.notification--success .notification__close,
+.notification--error .notification__close,
+.notification--info .notification__close {
   color: var(--notification-color);
 }
 
-.notification--warning .close {
+.notification--warning .notification__close {
   color: var(--notification-color-second);
 }
 
@@ -80,12 +82,15 @@
   opacity: 0;
 }
 
-.close {
+.notification__close {
   position: absolute;
   top: 5px;
   right: 5px;
   background: transparent;
   border: none;
-  font-size: 14px;
   cursor: pointer;
+}
+
+.notification__close span {
+  font-size: 28px;
 }

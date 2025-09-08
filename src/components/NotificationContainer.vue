@@ -1,56 +1,75 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { notificationStore as store } from '../core/useNotifications';
+import { getIcon } from '../utils/icons';
+import { POSITIONS } from '../constants/notification';
 
-import { getIcon } from '../utils/icons'
+import type { NotificationPosition } from '../types/notifications';
 
-const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
-
-const filteredByPosition = (pos: string) => {
-  return store.notifications.value.filter(n => n.position === pos);
-};
+const notificationsByPosition = computed(() => {
+  const groups: Partial<Record<NotificationPosition, typeof store.notifications.value>> = {};
+  
+  POSITIONS.forEach(position => {
+    groups[position] = store.notifications.value.filter(n => n.position === position);
+  });
+  
+  return groups;
+});
 </script>
 
 <template>
-  <div>
+  <div class="notifications-root">
     <div
-      v-for="pos in positions"
-      :key="pos"
+      v-for="position in POSITIONS"
+      :key="position"
       class="notifications-container"
-      :class="`notifications-container--${pos}`"
+      :class="`notifications-container--${position}`"
+      role="region"
+      :aria-label="`Notifications ${position}`"
     >
       <transition-group
         name="slide-fade"
         tag="div"
+        class="notifications-list"
       >
         <div
-          v-for="n in filteredByPosition(pos)"
-          :key="n.id"
+          v-for="notification in notificationsByPosition[position]"
+          :key="notification.id"
           class="notification"
-          :class="`notification--${n.type}`"
+          :class="[
+            `notification--${notification.type}`,
+            { 'notification--has-title': notification.title }
+          ]"
+          role="alert"
+          :aria-live="notification.type === 'error' ? 'assertive' : 'polite'"
         >
           <img
-            v-if="getIcon(n)"
-            :src="getIcon(n)"
-            class="notification-icon"
-            alt="icon"
+            v-if="getIcon(notification)"
+            :src="getIcon(notification)"
+            class="notification__icon"
+            alt=""
+            aria-hidden="true"
           >
-          <div class="notification-content">
-            <div
-              v-if="n.title"
-              class="notification-title"
+          
+          <div class="notification__content">
+            <h4
+              v-if="notification.title"
+              class="notification__title"
             >
-              {{ n.title }}
-            </div>
-            <div class="notification-message">
-              {{ n.message }}
-            </div>
+              {{ notification.title }}
+            </h4>
+            <p class="notification__message">
+              {{ notification.message }}
+            </p>
           </div>
+
           <button
-            v-if="n.closable || n.duration === 0"
-            class="close"
-            @click="store.remove(n.id)"
+            v-if="notification.closable || notification.duration === 0"
+            class="notification__close"
+            aria-label="Close notification"
+            @click="store.remove(notification.id)"
           >
-            ✕
+            <span aria-hidden="true">×</span>
           </button>
         </div>
       </transition-group>
