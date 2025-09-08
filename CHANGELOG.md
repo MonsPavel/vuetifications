@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/MonsPavel/vuetifications/compare/v1.2.0...v1.3.0) (2025-09-08)
+
+### Features
+
+* refactoring component, add accessibility ([68b47e5](https://github.com/MonsPavel/vuetifications/commit/68b47e596a8eb6c222a328a883853a7f240fe133))
+
 ## [1.2.0](https://github.com/MonsPavel/vuetifications/compare/v1.1.1...v1.2.0) (2025-09-07)
 
 ### Features
