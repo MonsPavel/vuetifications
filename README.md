@@ -89,6 +89,31 @@ notify(options: NotifyOptions): void
 | `position`  | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                          | `'top-right'` | Notification position                    |
 | `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `0` — disables auto-close |
 | `closable`  | `boolean`                                                                                   | `false`        | Show/Hide close btn                         |
+| `animation`  | `'slide-fade' \| 'fade' \| 'slide' \| 'scale' \| 'bounce' \| 'flip' \| 'zoom' \| 'none'`   |  `slide-fade`        | Animation style                     |
+
+---
+
+## 🎬 Animations
+
+Vuetifications provides multiple built-in transition effects:
+
+- `slid-fade` (default)
+- `fade`
+- `slide`
+- `bounce`
+- `flip`
+- `zoom`
+- `none` - without animations
+
+Usage:
+
+```ts
+notify({
+  message: 'Bouncy notification!',
+  type: 'info',
+  animation: 'bounce'
+})
+```
 
 ---
 

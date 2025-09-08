@@ -131,3 +131,69 @@ export const Closable: Story = {
     },
   }),
 };
+
+export const Animations: Story = {
+  render: () => ({
+    template: `<div class="flex gap-2">
+      <button @click="SlideFade" style="margin-right: 10px">Slide Fade</button>
+      <button @click="Fade" style="margin-right: 10px">Fade</button>
+      <button @click="Slide" style="margin-right: 10px">Slide</button>
+      <button @click="Scale" style="margin-right: 10px">Scale</button>
+      <button @click="Bounce" style="margin-right: 10px">Bounce</button>
+      <button @click="Flip" style="margin-right: 10px">Flip</button>
+      <button @click="Zoom" style="margin-right: 10px">Zoom</button>
+      <button @click="None" style="margin-right: 10px">None</button>
+    </div>`,
+    setup() {
+      const SlideFade = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'slide-fade'
+        });
+      const Fade = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'fade'
+        });
+      const Slide = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'slide'
+        });
+      const Scale = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'scale'
+        });
+      const Bounce = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'bounce'
+        });
+      const Flip = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'flip'
+        });
+      const Zoom = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'zoom'
+        });
+      const None = () =>
+        notify({
+          title: 'Animations',
+          message: 'Animations Test',
+          animation: 'none'
+        });
+      return { SlideFade, Fade, Slide, Scale, Bounce, Flip, Zoom, None };
+    },
+  }),
+};

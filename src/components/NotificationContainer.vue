@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { notificationStore as store } from '../core/useNotifications';
+
 import { getIcon } from '../utils/icons';
+import { AnimationProvider } from '../utils/animations';
+
 import { POSITIONS } from '../constants/notification';
 
-import type { NotificationPosition } from '../types/notifications';
+import type { NotificationPosition, Notification } from '../types/notifications';
 
 const notificationsByPosition = computed(() => {
   const groups: Partial<Record<NotificationPosition, typeof store.notifications.value>> = {};
@@ -15,6 +19,16 @@ const notificationsByPosition = computed(() => {
   
   return groups;
 });
+
+const getTransitionName = (position: NotificationPosition) => {
+  const notifications = notificationsByPosition.value[position];
+
+  if (notifications && notifications.length > 0) {
+    return AnimationProvider.getTransitionName(notifications[0].animation);
+  }
+
+  return 'slide-fade';
+};
 </script>
 
 <template>
@@ -28,7 +42,7 @@ const notificationsByPosition = computed(() => {
       :aria-label="`Notifications ${position}`"
     >
       <transition-group
-        name="slide-fade"
+        name="notification-group"
         tag="div"
         class="notifications-list"
       >
@@ -38,6 +52,7 @@ const notificationsByPosition = computed(() => {
           class="notification"
           :class="[
             `notification--${notification.type}`,
+            `notification-animation--${notification.animation || 'slide-fade'}`,
             { 'notification--has-title': notification.title }
           ]"
           role="alert"
