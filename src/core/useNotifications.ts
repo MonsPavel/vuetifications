@@ -14,6 +14,7 @@ export function useNotifications() {
       duration: 3000,
       position: 'top-right',
       closable: false,
+      animation: options.animation || 'slide-fade',
       ...options
     };
     notifications.value.push(n);

@@ -74,14 +74,6 @@
   color: var(--notification-color-second);
 }
 
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-enter-from, .slide-fade-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
 .notification__close {
   position: absolute;
   top: 5px;
@@ -93,4 +85,184 @@
 
 .notification__close span {
   font-size: 28px;
+}
+
+/* Глобальные стили анимаций */
+
+/* Базовые классы для TransitionGroup */
+.notification-group-enter-active,
+.notification-group-leave-active {
+  transition: all 0.3s ease;
+}
+
+.notification-group-move {
+  transition: transform 0.3s ease;
+}
+
+/* Индивидуальные анимации через CSS классы */
+
+/* Slide-Fade animation */
+.notification-animation--slide-fade.notification-group-enter-from,
+.notification-animation--slide-fade.notification-group-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notifications-container--top-left .notification-animation--slide-fade.notification-group-enter-from,
+.notifications-container--bottom-left .notification-animation--slide-fade.notification-group-enter-from,
+.notifications-container--top-left .notification-animation--slide-fade.notification-group-leave-to,
+.notifications-container--bottom-left .notification-animation--slide-fade.notification-group-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+/* Fade animation */
+.notification-animation--fade.notification-group-enter-from,
+.notification-animation--fade.notification-group-leave-to {
+  opacity: 0;
+}
+
+/* Slide animation */
+.notification-animation--slide.notification-group-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notification-animation--slide.notification-group-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Scale animation */
+.notification-animation--scale.notification-group-enter-from,
+.notification-animation--scale.notification-group-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* Bounce animation */
+.notification-animation--bounce {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.notification-animation--bounce.notification-group-enter-active {
+  animation-name: bounce-in;
+}
+
+.notification-animation--bounce.notification-group-leave-active {
+  animation-name: bounce-out;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* Flip animation */
+.notification-animation--flip {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.notification-animation--flip.notification-group-enter-active {
+  animation-name: flip-in;
+}
+
+.notification-animation--flip.notification-group-leave-active {
+  animation-name: flip-out;
+}
+
+@keyframes flip-in {
+  0% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flip-out {
+  0% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+}
+
+/* Zoom animation */
+.notification-animation--zoom {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.notification-animation--zoom.notification-group-enter-active {
+  animation-name: zoom-in;
+}
+
+.notification-animation--zoom.notification-group-leave-active {
+  animation-name: zoom-out;
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* None animation - без анимации */
+.notification-animation--none.notification-group-enter-active,
+.notification-animation--none.notification-group-leave-active {
+  transition: none;
+  animation: none;
+}
+
+.notification-animation--none.notification-group-enter-from,
+.notification-animation--none.notification-group-leave-to {
+  opacity: 1;
+  transform: none;
 }
