@@ -1,3 +1,9 @@
+## [1.4.4](https://github.com/MonsPavel/vuetifications/compare/v1.4.3...v1.4.4) (2025-09-09)
+
+### Bug Fixes
+
+* ci ([b7758c2](https://github.com/MonsPavel/vuetifications/commit/b7758c27cd5a7ee5fb87334ad2777d7903b39569))
+
 ## [1.4.3](https://github.com/MonsPavel/vuetifications/compare/v1.4.2...v1.4.3) (2025-09-09)
 
 ### Bug Fixes

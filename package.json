@@ -1,7 +1,7 @@
 {
   "name": "vuetifications",
   "private": false,
-  "version": "1.4.3",
+  "version": "1.4.4",
   "type": "module",
   "module": "./dist/vuetifications.es.ts",
   "files": [
