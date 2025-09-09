@@ -1,3 +1,9 @@
+## [1.4.2](https://github.com/MonsPavel/vuetifications/compare/v1.4.1...v1.4.2) (2025-09-09)
+
+### Bug Fixes
+
+* clear timers ([10a8cd3](https://github.com/MonsPavel/vuetifications/commit/10a8cd31ce08552b039e829f1d9469553c507668))
+
 ## [1.4.1](https://github.com/MonsPavel/vuetifications/compare/v1.4.0...v1.4.1) (2025-09-09)
 
 ### Bug Fixes
