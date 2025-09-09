@@ -1,3 +1,9 @@
+## [1.4.3](https://github.com/MonsPavel/vuetifications/compare/v1.4.2...v1.4.3) (2025-09-09)
+
+### Bug Fixes
+
+* add storybook demo ([fed2930](https://github.com/MonsPavel/vuetifications/commit/fed2930cb262f2b5940661eaad9a10976ecb258a))
+
 ## [1.4.2](https://github.com/MonsPavel/vuetifications/compare/v1.4.1...v1.4.2) (2025-09-09)
 
 ### Bug Fixes
