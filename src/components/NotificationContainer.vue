@@ -4,11 +4,10 @@ import { computed } from 'vue';
 import { notificationStore as store } from '../core/useNotifications';
 
 import { getIcon } from '../utils/icons';
-import { AnimationProvider } from '../utils/animations';
 
 import { POSITIONS } from '../constants/notification';
 
-import type { NotificationPosition, Notification } from '../types/notifications';
+import type { NotificationPosition } from '../types/notifications';
 
 const notificationsByPosition = computed(() => {
   const groups: Partial<Record<NotificationPosition, typeof store.notifications.value>> = {};
@@ -19,16 +18,6 @@ const notificationsByPosition = computed(() => {
   
   return groups;
 });
-
-const getTransitionName = (position: NotificationPosition) => {
-  const notifications = notificationsByPosition.value[position];
-
-  if (notifications && notifications.length > 0) {
-    return AnimationProvider.getTransitionName(notifications[0].animation);
-  }
-
-  return 'slide-fade';
-};
 </script>
 
 <template>
