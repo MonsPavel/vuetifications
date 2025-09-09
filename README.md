@@ -11,7 +11,6 @@
 
 You can try notifications in our [Storybook Demo](https://MonsPavel.github.io/vuetifications/).
 
-
 ---
 
 ## ✨ Features
