@@ -8,6 +8,9 @@ export default [
   ...tseslint.configs.recommended,
   ...vue.configs["flat/recommended"],
   {
+    ignores: ["docs/", "storybook-static/", "dist/"],
+  },
+  {
     files: ["**/*.vue"],
     languageOptions: {
       parser: vueParser,
