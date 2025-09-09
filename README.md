@@ -9,8 +9,7 @@
 
 ## 📖 Live Demo
 
-You can try all components and notifications in our [Storybook Demo](https://MonsPavel.github.io/vuetifications/).
-
+You can try notifications in our [Storybook Demo](https://MonsPavel.github.io/vuetifications/).
 
 ---
 
