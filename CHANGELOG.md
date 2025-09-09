@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/MonsPavel/vuetifications/compare/v1.4.0...v1.4.1) (2025-09-09)
+
+### Bug Fixes
+
+* remove unused func ([e6ec905](https://github.com/MonsPavel/vuetifications/commit/e6ec90573f0a825813ae478b30dfb596a10e4c3a))
+
 ## [1.4.0](https://github.com/MonsPavel/vuetifications/compare/v1.3.0...v1.4.0) (2025-09-08)
 
 ### Features
