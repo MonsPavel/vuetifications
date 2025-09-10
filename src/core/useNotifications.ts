@@ -4,6 +4,8 @@ import type { Notification  } from '../types/notifications'
 
 import { defaultOptions } from '../constants/notification'
 
+import { getIcon } from '../utils/icons'
+
 const notifications = ref<Notification[]>([]);
 let seed = 0;
 
@@ -16,6 +18,10 @@ export function useNotifications() {
       ...defaultOptions,
       ...options
     };
+
+    if (!n.icon && n.type) {
+      n.icon = getIcon(n);
+    }
     
     notifications.value.push(n);
 

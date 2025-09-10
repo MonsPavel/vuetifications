@@ -16,8 +16,8 @@ class NotificationManager {
   }
 
   mount() {
-    if (this.mounted) return;
-    
+    if (this.mounted || typeof document === 'undefined') return;
+
     const container = document.createElement('div');
     document.body.appendChild(container);
     createApp(NotificationContainer).mount(container);
