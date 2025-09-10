@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/MonsPavel/vuetifications/compare/v1.5.0...v1.5.1) (2025-09-10)
+
+### Bug Fixes
+
+* app performance, add ssr check ([47ba88b](https://github.com/MonsPavel/vuetifications/commit/47ba88b84a3fb16160e444cd731be7b4d8b7bf50))
+
 ## [1.5.0](https://github.com/MonsPavel/vuetifications/compare/v1.4.9...v1.5.0) (2025-09-10)
 
 ### Features
