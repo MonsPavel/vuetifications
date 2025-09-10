@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/MonsPavel/vuetifications/compare/v1.4.9...v1.5.0) (2025-09-10)
+
+### Features
+
+* add shorthands methods ([e18f396](https://github.com/MonsPavel/vuetifications/commit/e18f39678f1918fa0a5439742796fbde8b618593))
+
 ## [1.4.9](https://github.com/MonsPavel/vuetifications/compare/v1.4.8...v1.4.9) (2025-09-10)
 
 ### Bug Fixes
