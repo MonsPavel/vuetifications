@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/MonsPavel/vuetifications/compare/v1.4.4...v1.4.5) (2025-09-10)
+
+### Bug Fixes
+
+* deploy ([753ee12](https://github.com/MonsPavel/vuetifications/commit/753ee12e8b5c6bf3b6777222a3b148b4d35dcd9d))
+* package deployment ([54f2846](https://github.com/MonsPavel/vuetifications/commit/54f28463d07219bf4e6a647ce13a5bf8cc7e016a))
+
 ## [1.4.4](https://github.com/MonsPavel/vuetifications/compare/v1.4.3...v1.4.4) (2025-09-09)
 
 ### Bug Fixes
