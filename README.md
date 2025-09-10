@@ -100,6 +100,25 @@ notify(options: NotifyOptions): void
 
 ---
 
+## ⚡️ Shorthand Methods
+
+Instead of always passing the `type` option, you can use convenient shortcuts:
+
+```ts
+import { notify } from 'vuetifications'
+
+// Success
+notify.success(options)
+
+// Error
+notify.error(options)
+
+// Info
+notify.info(options)
+
+// Warning
+notify.warning(options)
+
 ## 🎬 Animations
 
 Vuetifications provides multiple built-in transition effects:
