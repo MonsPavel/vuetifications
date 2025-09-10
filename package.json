@@ -14,7 +14,7 @@
       "import": "./dist/vuetifications.es.ts",
       "require": "./dist/vuetifications.umd.ts"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./styles/vuetifications.css": "./dist/styles/vuetifications.css"
   },
   "types": "./dist/types/index.d.ts",
   "author": "Mons Pavel <monspavel@gmail.com>",
