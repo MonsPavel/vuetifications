@@ -1,3 +1,9 @@
+## [1.4.9](https://github.com/MonsPavel/vuetifications/compare/v1.4.8...v1.4.9) (2025-09-10)
+
+### Bug Fixes
+
+* build ([488ad2a](https://github.com/MonsPavel/vuetifications/commit/488ad2aee6968151a59d6134934d2b77eb093ea8))
+
 ## [1.4.8](https://github.com/MonsPavel/vuetifications/compare/v1.4.7...v1.4.8) (2025-09-10)
 
 ### Bug Fixes
