@@ -2,6 +2,8 @@ import { ref } from 'vue';
 
 import type { Notification  } from '../types/notifications'
 
+import { defaultOptions } from '../constants/notification'
+
 const notifications = ref<Notification[]>([]);
 let seed = 0;
 
@@ -9,27 +11,23 @@ const timeoutMap = new Map<number, number | NodeJS.Timeout>();
 
 export function useNotifications() {
   const add = (options: Omit<Notification, 'id'>) => {
-    const id = ++seed;
     const n: Notification = {
-      id,
-      type: 'info',
-      duration: 3000,
-      position: 'top-right',
-      closable: false,
-      animation: options.animation || 'slide-fade',
+      id: ++seed,
+      ...defaultOptions,
       ...options
     };
+    
     notifications.value.push(n);
 
     if (n.duration && n.duration > 0) {
       const timeoutId = setTimeout(() => {
-        remove(id);
+        remove(n.id);
       }, n.duration);
       
-      timeoutMap.set(id, timeoutId);
+      timeoutMap.set(n.id, timeoutId);
     }
 
-    return id;
+    return n.id;
   };
 
   const remove = (id: number) => {
