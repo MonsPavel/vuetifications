@@ -12,7 +12,7 @@
       "import": "./dist/vuetifications.es.js",
       "require": "./dist/vuetifications.umd.js"
     },
-    "./styles/vuetifications.css": "./dist/styles/vuetifications.css"
+    "./styles/vuetifications.css": "./dist/vuetifications.css"
   },
   "files": [
     "dist",

@@ -43,7 +43,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 // if styles are in a separate file:
-import 'vuetifications/styles/notifications.css'
+import 'vuetifications/vuetifications.css'
 
 createApp(App).mount('#app')
 ```
