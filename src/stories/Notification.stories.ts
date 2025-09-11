@@ -17,7 +17,7 @@ const meta: Meta<NotificationOptions> = {
   argTypes: {
     type: {
       control: { type: 'radio' },
-      options: ['success', 'error', 'info', 'warning'],
+      options: ['success', 'error', 'info', 'warning', 'simple'],
     },
     position: {
       control: { type: 'radio' },
