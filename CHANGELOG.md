@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/MonsPavel/vuetifications/compare/v1.5.1...v1.6.0) (2025-09-11)
+
+### Features
+
+* add new notification type ([202e166](https://github.com/MonsPavel/vuetifications/commit/202e166f8b300331eb3e5d38812c01aa62691470))
+
 ## [1.5.1](https://github.com/MonsPavel/vuetifications/compare/v1.5.0...v1.5.1) (2025-09-10)
 
 ### Bug Fixes

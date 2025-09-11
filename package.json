@@ -1,7 +1,7 @@
 {
   "name": "vuetifications",
   "private": false,
-  "version": "1.5.1",
+  "version": "1.6.0",
   "type": "module",
   "main": "./dist/vuetifications.umd.js",
   "module": "./dist/vuetifications.es.js",
