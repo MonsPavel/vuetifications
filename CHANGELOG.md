@@ -1,3 +1,58 @@
+## [1.6.0](https://github.com/MonsPavel/vuetifications/compare/v1.5.1...v1.6.0) (2025-09-11)
+
+### Features
+
+* add new notification type ([202e166](https://github.com/MonsPavel/vuetifications/commit/202e166f8b300331eb3e5d38812c01aa62691470))
+
+## [1.5.1](https://github.com/MonsPavel/vuetifications/compare/v1.5.0...v1.5.1) (2025-09-10)
+
+### Bug Fixes
+
+* app performance, add ssr check ([47ba88b](https://github.com/MonsPavel/vuetifications/commit/47ba88b84a3fb16160e444cd731be7b4d8b7bf50))
+
+## [1.5.0](https://github.com/MonsPavel/vuetifications/compare/v1.4.9...v1.5.0) (2025-09-10)
+
+### Features
+
+* add shorthands methods ([e18f396](https://github.com/MonsPavel/vuetifications/commit/e18f39678f1918fa0a5439742796fbde8b618593))
+
+## [1.4.9](https://github.com/MonsPavel/vuetifications/compare/v1.4.8...v1.4.9) (2025-09-10)
+
+### Bug Fixes
+
+* build ([488ad2a](https://github.com/MonsPavel/vuetifications/commit/488ad2aee6968151a59d6134934d2b77eb093ea8))
+
+## [1.4.8](https://github.com/MonsPavel/vuetifications/compare/v1.4.7...v1.4.8) (2025-09-10)
+
+### Bug Fixes
+
+* build ([d72d244](https://github.com/MonsPavel/vuetifications/commit/d72d244c178bc50cd3ec851eb5909964571e253d))
+
+## [1.4.7](https://github.com/MonsPavel/vuetifications/compare/v1.4.6...v1.4.7) (2025-09-10)
+
+### Bug Fixes
+
+* build ([3d7deda](https://github.com/MonsPavel/vuetifications/commit/3d7dedabd730d19d8ca5ef9f87101c67c24df703))
+
+## [1.4.6](https://github.com/MonsPavel/vuetifications/compare/v1.4.5...v1.4.6) (2025-09-10)
+
+### Bug Fixes
+
+* build ([580087e](https://github.com/MonsPavel/vuetifications/commit/580087ee75ec1f8c076bce275b961850c42de567))
+
+## [1.4.5](https://github.com/MonsPavel/vuetifications/compare/v1.4.4...v1.4.5) (2025-09-10)
+
+### Bug Fixes
+
+* deploy ([753ee12](https://github.com/MonsPavel/vuetifications/commit/753ee12e8b5c6bf3b6777222a3b148b4d35dcd9d))
+* package deployment ([54f2846](https://github.com/MonsPavel/vuetifications/commit/54f28463d07219bf4e6a647ce13a5bf8cc7e016a))
+
+## [1.4.4](https://github.com/MonsPavel/vuetifications/compare/v1.4.3...v1.4.4) (2025-09-09)
+
+### Bug Fixes
+
+* ci ([b7758c2](https://github.com/MonsPavel/vuetifications/commit/b7758c27cd5a7ee5fb87334ad2777d7903b39569))
+
 ## [1.4.3](https://github.com/MonsPavel/vuetifications/compare/v1.4.2...v1.4.3) (2025-09-09)
 
 ### Bug Fixes

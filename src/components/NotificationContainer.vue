@@ -3,21 +3,16 @@ import { computed } from 'vue';
 
 import { notificationStore as store } from '../core/useNotifications';
 
-import { getIcon } from '../utils/icons';
-
 import { POSITIONS } from '../constants/notification';
 
 import type { NotificationPosition } from '../types/notifications';
 
-const notificationsByPosition = computed(() => {
-  const groups: Partial<Record<NotificationPosition, typeof store.notifications.value>> = {};
-  
-  POSITIONS.forEach(position => {
-    groups[position] = store.notifications.value.filter(n => n.position === position);
-  });
-  
-  return groups;
-});
+const notificationsByPosition = computed(() =>
+  store.notifications.value.reduce((groups, n) => {
+    (groups[n.position ?? 'top-right'] ||= []).push(n)
+    return groups
+  }, {} as Record<NotificationPosition, typeof store.notifications.value>)
+)
 </script>
 
 <template>
@@ -48,8 +43,8 @@ const notificationsByPosition = computed(() => {
           :aria-live="notification.type === 'error' ? 'assertive' : 'polite'"
         >
           <img
-            v-if="getIcon(notification)"
-            :src="getIcon(notification)"
+            v-if="notification.icon"
+            :src="notification.icon"
             class="notification__icon"
             alt=""
             aria-hidden="true"

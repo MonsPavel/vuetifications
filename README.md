@@ -43,7 +43,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 // if styles are in a separate file:
-import 'vuetifications/styles/notifications.css'
+import 'vuetifications/vuetifications.css'
 
 createApp(App).mount('#app')
 ```
@@ -68,8 +68,9 @@ notify({
 ### `notify(options)`
 
 ```ts
-type NotificationType = 'success' | 'error' | 'info' | 'warning'
+type NotificationType = 'success' | 'error' | 'info' | 'warning' | 'simple'
 type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+type AnimationPreset = 'slide-fade' | 'fade'  | 'slide'  | 'scale' | 'bounce' | 'flip' | 'zoom' | 'none';
 
 interface NotifyOptions {
   title?: string
@@ -79,6 +80,7 @@ interface NotifyOptions {
   position?: NotificationPosition   // default: 'top-right'
   duration?: number                 // default: 3000 (ms), 0 — never auto-close
   closable?: boolean                // default: false
+  animation?: AnimationPreset       // default: 'slide-fade'
 }
 
 notify(options: NotifyOptions): void
@@ -92,11 +94,34 @@ notify(options: NotifyOptions): void
 |-------------|--------------------------------------------------------------------------------------------|---------------|------------------------------------------|
 | `title`     | `string`                                                                                   | `''`          | Notification title                       |
 | `message`   | `string`                                                                                   | `''`          | Notification message                     |
-| `type`      | `'success' \| 'error' \| 'info' \| 'warning'`                                           | `'info'`      | Notification type                        |
+| `type`      | `'success' \| 'error' \| 'info' \| 'warning' \| 'simple'`                                          | `'info'`      | Notification type                        |
 | `position`  | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                          | `'top-right'` | Notification position                    |
 | `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `0` — disables auto-close |
 | `closable`  | `boolean`                                                                                   | `false`        | Show/Hide close btn                         |
 | `animation`  | `'slide-fade' \| 'fade' \| 'slide' \| 'scale' \| 'bounce' \| 'flip' \| 'zoom' \| 'none'`   |  `slide-fade`        | Animation style                     |
+
+---
+
+## ⚡️ Shorthand Methods
+
+Instead of always passing the `type` option, you can use convenient shortcuts:
+
+```ts
+import { notify } from 'vuetifications'
+
+// Success
+notify.success(options)
+
+// Error
+notify.error(options)
+
+// Info
+notify.info(options)
+
+// Warning
+notify.warning(options)
+
+```
 
 ---
 
@@ -131,16 +156,18 @@ Vuetifications uses CSS variables. Override them globally or per theme container
 ```css
 :root {
   --notification-color: #fff;
-  --notification-color-second: #000;
+  --notification-color-second: #171a1f;
   --notification-radius: 10px;
-  --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
+  --notification-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --notification-border: 1px solid rgba(0, 0, 0, 0.05);
 
   --notification-success: #4CAF50;
   --notification-error: #E85963FF;
   --notification-info: #2196F3;
   --notification-warning: #FDF4F2FF;
+  --notification-simple: #FFF;
 
-  --notification-padding: 16px;
+  --notification-padding: 24px;
   --notification-width: 320px;
   --notification-z-index: 9999;
 }

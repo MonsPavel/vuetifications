@@ -2,12 +2,14 @@
   --notification-color: #fff;
   --notification-color-second: #171a1f;
   --notification-radius: 10px;
-  --notification-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f14;
+  --notification-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --notification-border: 1px solid rgba(0, 0, 0, 0.05);
 
   --notification-success: #4CAF50;
   --notification-error: #E85963FF;
   --notification-info: #2196F3;
   --notification-warning: #FDF4F2FF;
+  --notification-simple: #FFF;
 
   --notification-padding: 24px;
   --notification-width: 320px;
@@ -37,6 +39,8 @@
   align-items: center;
   margin-bottom: 10px;
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  box-shadow: var(--notification-shadow);
+  border: var(--notification-border);
 }
 
 .notification__icon {
@@ -63,6 +67,7 @@
 .notification--error { background: var(--notification-error); color: var(--notification-color); }
 .notification--info { background: var(--notification-info); color: var(--notification-color); }
 .notification--warning { background: var(--notification-warning); color: var(--notification-color-second); }
+.notification--simple { background: var(--notification-simple); color: var(--notification-color-second); }
 
 .notification--success .notification__close,
 .notification--error .notification__close,
