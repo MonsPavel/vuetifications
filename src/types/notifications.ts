@@ -11,8 +11,7 @@ export type AnimationPreset =
   | 'zoom'
   | 'none';
 
-export interface Notification {
-  id: number;
+export interface NotificationOptions {
   title?: string;
   message: string;
   type?: NotificationType;
@@ -23,13 +22,6 @@ export interface Notification {
   animation?: AnimationPreset;
 }
 
-export interface NotificationOptions {
-  title?: string;
-  message: string;
-  type?: NotificationType;
-  duration?: number;
-  position?: NotificationPosition;
-  icon?: string;
-  closable?: boolean;
-  animation?: AnimationPreset;
+export interface Notification extends NotificationOptions {
+  id: number;
 }

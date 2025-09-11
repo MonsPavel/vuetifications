@@ -22,5 +22,6 @@ notify.success = createShortcut('success')
 notify.error = createShortcut('error')
 notify.info = createShortcut('info')
 notify.warning = createShortcut('warning')
+notify.simple = createShortcut('simple')
 
 export { notify }
