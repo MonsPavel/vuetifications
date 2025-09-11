@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/MonsPavel/vuetifications/compare/v1.6.0...v1.6.1) (2025-09-11)
+
+### Bug Fixes
+
+* add simple shortcut ([6ec76c1](https://github.com/MonsPavel/vuetifications/commit/6ec76c19b3bd8a0d533e52d6c6df925f1680c6c2))
+
 ## [1.6.0](https://github.com/MonsPavel/vuetifications/compare/v1.5.1...v1.6.0) (2025-09-11)
 
 ### Features
