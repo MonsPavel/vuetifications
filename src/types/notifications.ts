@@ -1,4 +1,4 @@
-export type NotificationType = 'success' | 'error' | 'info' | 'warning';
+export type NotificationType = 'success' | 'error' | 'info' | 'warning' | 'simple';
 export type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 export type AnimationPreset =
