@@ -71,6 +71,21 @@ export const Warning: Story = {
   }),
 };
 
+export const Simple: Story = {
+  render: () => ({
+    template: `<button @click="show">Show Simple Notification</button>`,
+    setup() {
+      const show = () =>
+        notify({
+          title: 'Simple Notification',
+          message: 'This is Simple Notification',
+          type: 'simple',
+        });
+      return { show };
+    },
+  }),
+};
+
 export const Positioned: Story = {
   render: () => ({
     template: `<div class="flex gap-2">
