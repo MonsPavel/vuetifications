@@ -52,4 +52,12 @@ export function useNotifications() {
   return { notifications, add, remove };
 }
 
-export const notificationStore = useNotifications();
+const notificationStore = useNotifications();
+
+const { add, remove } = notificationStore
+
+export {
+  notificationStore,
+  add,
+  remove
+}
