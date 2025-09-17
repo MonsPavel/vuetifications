@@ -1,3 +1,9 @@
+## [1.6.2](https://github.com/MonsPavel/vuetifications/compare/v1.6.1...v1.6.2) (2025-09-17)
+
+### Bug Fixes
+
+* small refactoring ([a645a35](https://github.com/MonsPavel/vuetifications/commit/a645a3527412bcad9e48c5c4629d48c40d0b8e83))
+
 ## [1.6.1](https://github.com/MonsPavel/vuetifications/compare/v1.6.0...v1.6.1) (2025-09-11)
 
 ### Bug Fixes
