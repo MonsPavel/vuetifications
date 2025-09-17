@@ -121,6 +121,9 @@ notify.info(options)
 // Warning
 notify.warning(options)
 
+// Simple
+notify.simple(options)
+
 ```
 
 ---
