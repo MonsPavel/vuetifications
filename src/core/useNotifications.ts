@@ -9,7 +9,7 @@ import { getIcon } from '../utils/icons'
 const notifications = ref<Notification[]>([]);
 let seed = 0;
 
-const timeoutMap = new Map<number, number | NodeJS.Timeout>();
+const timeoutMap = new Map<number, ReturnType<typeof setTimeout>>();
 
 export function useNotifications() {
   const add = (options: Omit<Notification, 'id'>) => {
@@ -38,7 +38,7 @@ export function useNotifications() {
 
   const remove = (id: number) => {
     if (timeoutMap.has(id)) {
-      clearTimeout(timeoutMap.get(id) as number);
+      clearTimeout(timeoutMap.get(id));
       timeoutMap.delete(id);
     }
 

@@ -14,7 +14,7 @@ const notificationClasses = computed(() => ([
   { 'notification--has-title': notification.title }
 ]))
 
-const notificationAriaLive = computed(() => (notification.type === 'error' ? 'assertive' : 'polite'))
+const notificationRole = computed(() => (notification.type === 'error' ? 'alert' : 'status'))
 const showCloseBtn = computed(() => (notification.closable || notification.duration === 0))
 </script>
 
@@ -22,8 +22,7 @@ const showCloseBtn = computed(() => (notification.closable || notification.durat
   <div
     class="notification"
     :class="notificationClasses"
-    role="alert"
-    :aria-live="notificationAriaLive"
+    :role="notificationRole"
   >
     <img
       v-if="notification.icon"
