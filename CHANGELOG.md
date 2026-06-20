@@ -4,6 +4,12 @@
 
 * small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
 
+## [1.6.3](https://github.com/MonsPavel/vuetifications/compare/v1.6.2...v1.6.3) (2026-06-20)
+
+### Bug Fixes
+
+* small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
+
 ## [1.6.2](https://github.com/MonsPavel/vuetifications/compare/v1.6.1...v1.6.2) (2025-09-17)
 
 ### Bug Fixes
