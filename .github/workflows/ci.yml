@@ -9,8 +9,12 @@ on:
 jobs:
   # --- CI: линт, тесты и сборка ---
   test-and-build:
-    name: Test, Lint and Build
+    name: Test, Lint and Build (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20, 22]
 
     steps:
       - name: Checkout
@@ -19,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       - name: Install Dependencies
@@ -27,6 +31,9 @@ jobs:
 
       - name: Run Linter
         run: npm run lint
+
+      - name: Run Unit Tests
+        run: npm run test:coverage
 
       - name: Build Package
         run: npm run build
