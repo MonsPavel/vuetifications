@@ -20,7 +20,7 @@ export function useNotifications() {
     };
 
     if (!n.icon && n.type) {
-      n.icon = getIcon(n);
+      n.icon = getIcon(n.type);
     }
     
     notifications.value.push(n);

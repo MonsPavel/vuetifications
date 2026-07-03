@@ -3,7 +3,7 @@ import errorIcon from '../assets/icons/error.svg'
 import infoIcon from '../assets/icons/info.svg'
 import warningIcon from '../assets/icons/warning.svg'
 
-import type { Notification, NotificationType } from '../types/notifications'
+import type { NotificationType } from '../types/notifications'
 
 const defaultIcons: Partial<Record<NotificationType, string>> = {
   success: successIcon,
@@ -12,12 +12,4 @@ const defaultIcons: Partial<Record<NotificationType, string>> = {
   warning: warningIcon,
 }
 
-export const getIcon = (n: Notification): string => {
-  const { icon, type } = n
-
-  if (icon) return icon
-
-  if (type) return defaultIcons[type] ?? ''
-
-  return ''
-}
+export const getIcon = (type: NotificationType): string => defaultIcons[type] ?? ''

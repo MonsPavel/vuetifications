@@ -1,10 +1,10 @@
-import { notificationManager } from './core/NotificationManager';
+import { ensureMounted } from './core/mount';
 import { notificationStore } from './core/useNotifications';
 
 import type { NotificationOptions } from './types/notifications'
 
 function notify(options: NotificationOptions) {
-  notificationManager.mount();
+  ensureMounted();
   notificationStore.add(options);
 }
 

@@ -1,0 +1,112 @@
+import { afterEach, describe, expect, it } from 'vitest';
+import { mount } from '@vue/test-utils';
+
+import NotificationItem from '../NotificationItem.vue';
+import { notificationStore } from '../../core/useNotifications';
+
+import type { Notification } from '../../types/notifications';
+
+const { notifications, add, remove } = notificationStore;
+
+const baseNotification = (overrides: Partial<Notification> = {}): Notification => ({
+  id: 1,
+  message: 'test message',
+  type: 'info',
+  duration: 0,
+  closable: false,
+  ...overrides
+});
+
+const clearStore = () => {
+  for (const n of [...notifications.value]) remove(n.id);
+};
+
+afterEach(clearStore);
+
+describe('NotificationItem', () => {
+  it('renders the message', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification() }
+    });
+
+    expect(wrapper.find('.notification__message').text()).toBe('test message');
+  });
+
+  it('renders the title only when present', () => {
+    const withTitle = mount(NotificationItem, {
+      props: { notification: baseNotification({ title: 'Title' }) }
+    });
+    const withoutTitle = mount(NotificationItem, {
+      props: { notification: baseNotification() }
+    });
+
+    expect(withTitle.find('.notification__title').text()).toBe('Title');
+    expect(withTitle.classes()).toContain('notification--has-title');
+    expect(withoutTitle.find('.notification__title').exists()).toBe(false);
+  });
+
+  it('uses role="alert" for errors and role="status" otherwise', () => {
+    const error = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'error' }) }
+    });
+    const info = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'info' }) }
+    });
+
+    expect(error.attributes('role')).toBe('alert');
+    expect(info.attributes('role')).toBe('status');
+  });
+
+  it('applies type and animation classes', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'warning', animation: 'zoom' }) }
+    });
+
+    expect(wrapper.classes()).toContain('notification--warning');
+    expect(wrapper.classes()).toContain('notification-animation--zoom');
+  });
+
+  it('shows the close button when closable', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ closable: true, duration: 3000 }) }
+    });
+
+    expect(wrapper.find('.notification__close').exists()).toBe(true);
+  });
+
+  it('shows the close button when duration is 0 even if not closable', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ closable: false, duration: 0 }) }
+    });
+
+    expect(wrapper.find('.notification__close').exists()).toBe(true);
+  });
+
+  it('hides the close button when not closable and auto-closing', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ closable: false, duration: 3000 }) }
+    });
+
+    expect(wrapper.find('.notification__close').exists()).toBe(false);
+  });
+
+  it('renders the icon when set', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ icon: 'icon.svg' }) }
+    });
+
+    expect(wrapper.find('.notification__icon').attributes('src')).toBe('icon.svg');
+  });
+
+  it('removes the notification from the store on close click', async () => {
+    const id = add({ message: 'bye', duration: 0, closable: true });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, {
+      props: { notification: stored }
+    });
+
+    await wrapper.find('.notification__close').trigger('click');
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+  });
+});
