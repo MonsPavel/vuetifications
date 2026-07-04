@@ -1,20 +1,25 @@
 import { ensureMounted } from './core/mount';
 import { notificationStore } from './core/useNotifications';
 
-import type { NotificationOptions } from './types/notifications'
+import type { NotificationHandle, NotificationOptions } from './types/notifications'
 
-function notify(options: NotificationOptions) {
+function notify(options: NotificationOptions | string): NotificationHandle {
   ensureMounted();
-  notificationStore.add(options);
+  const normalized =
+    typeof options === 'string'
+      ? { message: options }
+      : options
+  const id = notificationStore.add(normalized);
+  return { id, close: () => notificationStore.remove(id) };
 }
 
 const createShortcut = (type: NotificationOptions['type']) => {
-  return (options: Omit<NotificationOptions, 'type'> | string) => {
+  return (options: Omit<NotificationOptions, 'type'> | string): NotificationHandle => {
     const normalized =
       typeof options === 'string'
         ? { message: options }
         : options
-    notify({ ...normalized, type })
+    return notify({ ...normalized, type })
   }
 }
 

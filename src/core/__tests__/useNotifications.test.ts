@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { notificationStore } from '../useNotifications';
 import { defaultOptions } from '../../constants/notification';
 
-const { notifications, add, remove } = notificationStore;
+const { notifications, add, remove, clear, pause, resume } = notificationStore;
 
 const clearStore = () => {
   for (const n of [...notifications.value]) remove(n.id);
@@ -128,5 +128,78 @@ describe('remove', () => {
 
     vi.advanceTimersByTime(5000);
     expect(notifications.value).toHaveLength(0);
+  });
+});
+
+describe('clear', () => {
+  it('removes all notifications', () => {
+    add({ message: 'one', duration: 0 });
+    add({ message: 'two', duration: 0 });
+    add({ message: 'three', duration: 1000 });
+
+    clear();
+    expect(notifications.value).toHaveLength(0);
+  });
+
+  it('cancels pending auto-remove timeouts', () => {
+    const clearSpy = vi.spyOn(globalThis, 'clearTimeout');
+    add({ message: 'x', duration: 1000 });
+    add({ message: 'y', duration: 2000 });
+
+    clear();
+    expect(clearSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('is a no-op on an empty store', () => {
+    expect(() => clear()).not.toThrow();
+    expect(notifications.value).toHaveLength(0);
+  });
+});
+
+describe('pause / resume', () => {
+  it('pause stops the auto-remove timer, resume restarts with the remaining time', () => {
+    const id = add({ message: 'x', duration: 1000 });
+
+    vi.advanceTimersByTime(600);
+    pause(id);
+
+    vi.advanceTimersByTime(60_000);
+    expect(notifications.value).toHaveLength(1);
+
+    resume(id);
+    vi.advanceTimersByTime(399);
+    expect(notifications.value).toHaveLength(1);
+
+    vi.advanceTimersByTime(1);
+    expect(notifications.value).toHaveLength(0);
+  });
+
+  it('double pause and double resume are safe', () => {
+    const id = add({ message: 'x', duration: 1000 });
+
+    pause(id);
+    pause(id);
+    resume(id);
+    resume(id);
+
+    vi.advanceTimersByTime(1000);
+    expect(notifications.value).toHaveLength(0);
+  });
+
+  it('is a no-op for a notification without a timer', () => {
+    const id = add({ message: 'x', duration: 0 });
+
+    pause(id);
+    resume(id);
+
+    vi.advanceTimersByTime(60_000);
+    expect(notifications.value).toHaveLength(1);
+  });
+
+  it('is a no-op for an unknown id', () => {
+    expect(() => {
+      pause(999_999);
+      resume(999_999);
+    }).not.toThrow();
   });
 });

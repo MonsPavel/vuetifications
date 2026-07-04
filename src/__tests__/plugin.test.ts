@@ -23,6 +23,37 @@ describe('notify', () => {
     expect(notifications.value[0]).toMatchObject({ message: 'hello', type: 'success' });
   });
 
+  it('accepts a plain string', () => {
+    notify('just text');
+
+    expect(notifications.value[0]).toMatchObject({ message: 'just text' });
+  });
+
+  it('returns a handle with the notification id', () => {
+    const handle = notify({ message: 'hello' });
+
+    expect(handle.id).toBe(notifications.value[0].id);
+  });
+
+  it('handle.close() removes the notification', () => {
+    const kept = notify({ message: 'kept', duration: 0 });
+    const closed = notify({ message: 'closed', duration: 0 });
+
+    closed.close();
+
+    expect(notifications.value).toHaveLength(1);
+    expect(notifications.value[0].id).toBe(kept.id);
+  });
+
+  it('handle.close() is safe to call twice', () => {
+    const handle = notify({ message: 'x', duration: 0 });
+
+    handle.close();
+    handle.close();
+
+    expect(notifications.value).toHaveLength(0);
+  });
+
   it('mounts the container into document.body only once', () => {
     notify({ message: 'one' });
     notify({ message: 'two' });
@@ -53,5 +84,12 @@ describe('shortcuts', () => {
     notify[type]('just a message');
 
     expect(notifications.value[0]).toMatchObject({ message: 'just a message', type });
+  });
+
+  it.each(shortcuts)('notify.%s returns a working handle', (type) => {
+    const handle = notify[type]('to be closed');
+
+    handle.close();
+    expect(notifications.value).toHaveLength(0);
   });
 });

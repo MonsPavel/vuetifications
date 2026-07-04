@@ -57,6 +57,61 @@ describe('NotificationContainer', () => {
     expect(wrapper.findAll('.notification')).toHaveLength(0);
   });
 
+  it('exposes role="region" only for positions with notifications', async () => {
+    const wrapper = mount(NotificationContainer);
+    expect(wrapper.findAll('[role="region"]')).toHaveLength(0);
+
+    add({ message: 'x', position: 'top-left', duration: 0 });
+    await nextTick();
+
+    const regions = wrapper.findAll('[role="region"]');
+    expect(regions).toHaveLength(1);
+    expect(regions[0].classes()).toContain('notifications-container--top-left');
+  });
+
+  it('announces new notifications in the polite live region', async () => {
+    const wrapper = mount(NotificationContainer);
+
+    add({ message: 'hello', title: 'Hi', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('Hi. hello');
+    expect(wrapper.find('[role="alert"]').text()).toBe('');
+  });
+
+  it('announces errors in the assertive live region', async () => {
+    const wrapper = mount(NotificationContainer);
+
+    add({ message: 'boom', type: 'error', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="alert"]').text()).toBe('boom');
+    expect(wrapper.find('[role="status"]').text()).toBe('');
+  });
+
+  it('announces a notification added in the same tick as a removal', async () => {
+    const id = add({ message: 'old', duration: 0 });
+    const wrapper = mount(NotificationContainer);
+
+    remove(id);
+    add({ message: 'replacement', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('replacement');
+  });
+
+  it('keeps the live region text after the notification is removed', async () => {
+    const wrapper = mount(NotificationContainer);
+
+    const id = add({ message: 'gone', duration: 0 });
+    await nextTick();
+
+    remove(id);
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('gone');
+  });
+
   it('keeps notifications ordered by insertion within one position', () => {
     add({ message: 'first', position: 'top-right', duration: 0 });
     add({ message: 'second', position: 'top-right', duration: 0 });
