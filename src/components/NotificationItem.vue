@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { remove } from '../core/useNotifications';
+import { remove, pause, resume } from '../core/useNotifications';
 
 import type { Notification } from '../types/notifications';
 
@@ -8,21 +8,26 @@ const { notification } = defineProps<{
   notification: Notification
 }>()
 
+const showCloseBtn = computed(() => (notification.closable || notification.duration === 0))
+
 const notificationClasses = computed(() => ([
   `notification--${notification.type}`,
   `notification-animation--${notification.animation || 'slide-fade'}`,
-  { 'notification--has-title': notification.title }
+  {
+    'notification--has-title': notification.title,
+    'notification--closable': showCloseBtn.value
+  }
 ]))
-
-const notificationRole = computed(() => (notification.type === 'error' ? 'alert' : 'status'))
-const showCloseBtn = computed(() => (notification.closable || notification.duration === 0))
 </script>
 
 <template>
   <div
     class="notification"
     :class="notificationClasses"
-    :role="notificationRole"
+    tabindex="0"
+    @focusin="pause(notification.id)"
+    @focusout="resume(notification.id)"
+    @keydown.escape="remove(notification.id)"
   >
     <img
       v-if="notification.icon"
@@ -31,14 +36,14 @@ const showCloseBtn = computed(() => (notification.closable || notification.durat
       alt=""
       aria-hidden="true"
     >
-          
+
     <div class="notification__content">
-      <h4
+      <div
         v-if="notification.title"
         class="notification__title"
       >
         {{ notification.title }}
-      </h4>
+      </div>
       <p class="notification__message">
         {{ notification.message }}
       </p>

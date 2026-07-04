@@ -25,3 +25,8 @@ export interface NotificationOptions {
 export interface Notification extends NotificationOptions {
   id: number;
 }
+
+export interface NotificationHandle {
+  id: number;
+  close: () => void;
+}

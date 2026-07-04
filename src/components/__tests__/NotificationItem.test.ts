@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 
 import NotificationItem from '../NotificationItem.vue';
@@ -45,16 +45,28 @@ describe('NotificationItem', () => {
     expect(withoutTitle.find('.notification__title').exists()).toBe(false);
   });
 
-  it('uses role="alert" for errors and role="status" otherwise', () => {
-    const error = mount(NotificationItem, {
-      props: { notification: baseNotification({ type: 'error' }) }
-    });
-    const info = mount(NotificationItem, {
-      props: { notification: baseNotification({ type: 'info' }) }
+  it('renders the title as a div, not a heading', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ title: 'Title' }) }
     });
 
-    expect(error.attributes('role')).toBe('alert');
-    expect(info.attributes('role')).toBe('status');
+    expect(wrapper.find('.notification__title').element.tagName).toBe('DIV');
+  });
+
+  it('does not set a live-region role on the item (announcements go through the container)', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'error' }) }
+    });
+
+    expect(wrapper.attributes('role')).toBeUndefined();
+  });
+
+  it('is focusable', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification() }
+    });
+
+    expect(wrapper.attributes('tabindex')).toBe('0');
   });
 
   it('applies type and animation classes', () => {
@@ -108,5 +120,38 @@ describe('NotificationItem', () => {
 
     await wrapper.find('.notification__close').trigger('click');
     expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+  });
+
+  it('removes the notification on Escape', async () => {
+    const id = add({ message: 'esc me', duration: 0 });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, {
+      props: { notification: stored }
+    });
+
+    await wrapper.trigger('keydown', { key: 'Escape' });
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+  });
+
+  it('pauses the auto-remove timer while focused and resumes on blur', async () => {
+    vi.useFakeTimers();
+
+    const id = add({ message: 'focus me', duration: 1000 });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, {
+      props: { notification: stored }
+    });
+
+    await wrapper.trigger('focusin');
+    vi.advanceTimersByTime(60_000);
+    expect(notifications.value.find(n => n.id === id)).toBeDefined();
+
+    await wrapper.trigger('focusout');
+    vi.advanceTimersByTime(1000);
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+
+    vi.useRealTimers();
   });
 });
