@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/MonsPavel/vuetifications/compare/v1.6.3...v1.7.0) (2026-07-04)
+
+### Features
+
+* notify handle + clear/remove exports, CSS fixes, a11y improvements ([#35](https://github.com/MonsPavel/vuetifications/issues/35)) ([f53b7f0](https://github.com/MonsPavel/vuetifications/commit/f53b7f085004ec8dfef18a01b014ab2654a29be8))
+
 ## [1.6.3](https://github.com/MonsPavel/vuetifications/compare/v1.6.2...v1.6.3) (2026-06-20)
 
 ### Bug Fixes
