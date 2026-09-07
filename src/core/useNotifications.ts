@@ -8,11 +8,14 @@ import { defaultOptions } from '../constants/notification'
 export interface NotificationsStoreOptions {
   /** Дефолты, вливаемые в каждое уведомление этого стора */
   defaults?: Partial<NotificationOptions>;
+  /** Максимум одновременных уведомлений; лишние ждут в очереди (0 — без лимита) */
+  maxVisible?: number;
 }
 
 export interface NotificationsStore {
   notifications: Ref<Notification[]>;
   add: (input: NotificationOptions) => number;
+  update: (id: number, options: Partial<NotificationOptions>) => void;
   remove: (id: number) => void;
   clear: () => void;
   pause: (id: number) => void;
@@ -28,9 +31,12 @@ interface TimerState {
 
 export function createNotificationsStore(options: NotificationsStoreOptions = {}): NotificationsStore {
   const defaults: Partial<NotificationOptions> = { ...defaultOptions, ...options.defaults };
+  const maxVisible = options.maxVisible ?? 0;
   const notifications = ref<Notification[]>([]);
   let seed = 0;
   const timerMap = new Map<number, TimerState>();
+  // Уведомления сверх maxVisible: ждут здесь, таймер стартует при показе
+  const pendingQueue: Notification[] = [];
 
   const startTimer = (id: number, duration: number) => {
     const timeoutId = setTimeout(() => {
@@ -48,6 +54,11 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
       ...input
     };
 
+    if (maxVisible > 0 && notifications.value.length >= maxVisible) {
+      pendingQueue.push(n);
+      return n.id;
+    }
+
     notifications.value.push(n);
 
     if (n.duration && n.duration > 0) {
@@ -55,6 +66,37 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
     }
 
     return n.id;
+  };
+
+  const update = (id: number, updateOptions: Partial<NotificationOptions>) => {
+    const index = notifications.value.findIndex(n => n.id === id);
+
+    if (index === -1) return;
+
+    const current = notifications.value[index];
+    const updated: Notification = { ...current, ...updateOptions, id };
+    notifications.value.splice(index, 1, updated);
+
+    if ((current.duration ?? 0) !== (updated.duration ?? 0)) {
+      const timer = timerMap.get(id);
+      if (timer) {
+        clearTimeout(timer.timeoutId);
+        timerMap.delete(id);
+      }
+      if (updated.duration && updated.duration > 0) {
+        startTimer(id, updated.duration);
+      }
+    }
+  };
+
+  const flushPending = () => {
+    while (maxVisible > 0 && pendingQueue.length && notifications.value.length < maxVisible) {
+      const n = pendingQueue.shift()!;
+      notifications.value.push(n);
+      if (n.duration && n.duration > 0) {
+        startTimer(n.id, n.duration);
+      }
+    }
   };
 
   const remove = (id: number) => {
@@ -70,9 +112,12 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
     if (index > -1) {
       notifications.value.splice(index, 1);
     }
+
+    flushPending();
   };
 
   const clear = () => {
+    pendingQueue.length = 0;
     for (const n of [...notifications.value]) remove(n.id);
   };
 
@@ -99,7 +144,7 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
     }, timer.remaining);
   };
 
-  return { notifications, add, remove, clear, pause, resume };
+  return { notifications, add, update, remove, clear, pause, resume };
 }
 
 // Дефолтный синглтон: fallback для вызова notify() вне setup и для обратной совместимости

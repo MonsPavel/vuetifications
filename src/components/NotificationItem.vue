@@ -33,6 +33,9 @@ const notificationClasses = computed(() => ([
     @focusin="store.pause(notification.id)"
     @focusout="store.resume(notification.id)"
     @keydown.escape="store.remove(notification.id)"
+    @click="notification.closeOnClick && store.remove(notification.id)"
+    @mouseenter="notification.pauseOnHover && store.pause(notification.id)"
+    @mouseleave="notification.pauseOnHover && store.resume(notification.id)"
   >
     <NotificationIcon
       v-if="!notification.icon && notification.type && notification.type !== 'simple'"

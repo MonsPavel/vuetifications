@@ -13,4 +13,6 @@ export const defaultOptions = {
   position: 'top-right',
   closable: false,
   animation: 'slide-fade',
+  closeOnClick: false,
+  pauseOnHover: true,
 } satisfies Partial<NotificationOptions>;

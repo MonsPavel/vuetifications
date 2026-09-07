@@ -6,8 +6,10 @@ import { ensureMounted } from './core/mount';
 import { createNotificationsStore, getActiveStore, notificationStore, notificationsKey, setActiveStore } from './core/useNotifications';
 import NotificationContainer from './components/NotificationContainer.vue';
 
+import { defaultOptions } from './constants/notification';
+
 import type { NotificationsStore } from './core/useNotifications';
-import type { NotificationHandle, NotificationOptions } from './types/notifications'
+import type { NotificationHandle, NotificationOptions, NotificationType, PromiseNotificationContent, PromiseNotificationsOptions } from './types/notifications'
 
 export interface VuetificationsPluginOptions {
   /** Дефолты для каждого уведомления приложения */
@@ -16,7 +18,7 @@ export interface VuetificationsPluginOptions {
   store?: NotificationsStore;
 }
 
-function notify(options: NotificationOptions | string): NotificationHandle {
+function addToast(options: NotificationOptions): NotificationHandle {
   // SSR: notify — клиентский API, на сервере безопасно ничего не делает
   if (typeof document === 'undefined') {
     return { id: -1, close: () => {} };
@@ -29,12 +31,16 @@ function notify(options: NotificationOptions | string): NotificationHandle {
     ensureMounted();
   }
 
+  const id = store.add(options);
+  return { id, close: () => store.remove(id) };
+}
+
+function notify(options: NotificationOptions | string): NotificationHandle {
   const normalized =
     typeof options === 'string'
       ? { message: options }
       : options
-  const id = store.add(normalized);
-  return { id, close: () => store.remove(id) };
+  return addToast(normalized);
 }
 
 const createShortcut = (type: NotificationOptions['type']) => {
@@ -52,6 +58,52 @@ notify.error = createShortcut('error')
 notify.info = createShortcut('info')
 notify.warning = createShortcut('warning')
 notify.simple = createShortcut('simple')
+
+const normalizeContent = (content?: PromiseNotificationContent): Partial<NotificationOptions> =>
+  typeof content === 'string'
+    ? { message: content }
+    : (content ?? {})
+
+/**
+ * notify.promise(promise, { loading, success, error }): показывает loading-тост,
+ * затем заменяет его на success/error. Исходный промис возвращается как есть.
+ */
+notify.promise = <T>(promise: Promise<T>, options: PromiseNotificationsOptions = {}): Promise<T> => {
+  const handle = addToast({
+    ...normalizeContent(options.loading),
+    type: 'info',
+    duration: 0,
+    closable: false
+  });
+
+  const finish = (content: PromiseNotificationContent | undefined, fallbackType: NotificationType) => {
+    if (content === undefined) {
+      handle.close();
+      return;
+    }
+
+    getActiveStore().update(handle.id, {
+      type: fallbackType,
+      duration: defaultOptions.duration,
+      ...normalizeContent(content)
+    });
+  };
+
+  const relay = promise.then(
+    data => {
+      finish(options.success, 'success');
+      return data;
+    },
+    error => {
+      finish(options.error, 'error');
+      throw error;
+    }
+  );
+  // Обработчик вешаем на производный промис: ответственность за исходный — на вызывающем
+  relay.catch(() => {});
+
+  return promise;
+};
 
 export { notify }
 

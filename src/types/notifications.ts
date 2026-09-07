@@ -20,6 +20,19 @@ export interface NotificationOptions {
   icon?: string;
   closable?: boolean;
   animation?: AnimationPreset;
+  /** Закрывать уведомление по клику на него */
+  closeOnClick?: boolean;
+  /** Ставить авто-закрытие на паузу при наведении (по умолчанию true) */
+  pauseOnHover?: boolean;
+}
+
+/** Контент для notify.promise(): строка или набор опций */
+export type PromiseNotificationContent = string | Partial<NotificationOptions>;
+
+export interface PromiseNotificationsOptions {
+  loading?: PromiseNotificationContent;
+  success?: PromiseNotificationContent;
+  error?: PromiseNotificationContent;
 }
 
 export interface Notification extends NotificationOptions {
