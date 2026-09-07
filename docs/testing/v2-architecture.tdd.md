@@ -54,6 +54,24 @@
 statements 98.57%, branches 92.9%, functions 97.22%, lines 98.57%.
 `index.ts` — 100% (публичный вход покрыт).
 
+## Addendum: фиксы по результатам код-ревью (коммит 5f32f1a)
+
+Код-ревью ветки (ecc:code-reviewer, verdict request-changes) → все 6 находок
+закрыты тем же TDD-циклом (7 новых RED-тестов → 109/109 GREEN):
+
+| # | Находка ревью | Гарантия после фикса | Тест |
+|---|---|---|---|
+| 1 (MAJOR) | `install()` терял `maxVisible` из опций плагина | `app.use(Vuetifications, { maxVisible: 1 })` ограничивает видимые тосты | `install.test.ts: forwards maxVisible` |
+| 2 (MAJOR) | тосты из очереди `maxVisible` невидимы для `update()`/`remove()`/`close()` | `remove()`/`update()` действуют и на `pendingQueue`; «вечный loading» из promise-тоста невозможен | `createNotificationsStore.test.ts: remove discards queued / update applies to queued` |
+| 3 (MINOR) | `notify.promise` резолвился против текущего активного стора | стор фиксируется на момент вызова; чужой тост с тем же id не перезаписывается | `install.test.ts: originating store` |
+| 4 (MINOR) | `update()` перезапускал паузу как активный таймер | пауза сохраняется при смене duration | `createNotificationsStore.test.ts: keeps the timer paused` |
+| 5 (MINOR) | promise-тост игнорировал `defaults.duration` плагина | финальный тост живёт `store.defaults.duration` | `install.test.ts: honors the plugin default duration` |
+| 6 (NIT) | контейнер переозвучивал существующие тосты; drain-цепочка не отменялась | `lastAnnouncedId` инициализируется max id на монтировании; цепочка гасится в `onUnmounted` | `NotificationContainer.test.ts: does not re-announce` |
+
+Попутное улучшение из той же зоны: unmount плагина очищает только созданные
+плагином сторы; переданный через `store:` пользовательский стор переживает
+размонтирование приложения.
+
 ## Известные пробелы / follow-ups
 
 - Storybook play-функции и отдельные истории на новые фичи — CI-джоба
