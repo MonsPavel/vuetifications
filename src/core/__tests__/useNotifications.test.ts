@@ -54,11 +54,18 @@ describe('add', () => {
     });
   });
 
-  it('sets a default icon based on type', () => {
+  it('leaves icon unset for typed notifications (rendered inline by the component)', () => {
     const id = add({ message: 'x', type: 'success' });
     const n = notifications.value.find(item => item.id === id);
 
-    expect(n?.icon).toBeTruthy();
+    expect(n?.icon).toBeUndefined();
+  });
+
+  it('does not auto-remove when duration is negative', () => {
+    add({ message: 'x', duration: -1 });
+
+    vi.advanceTimersByTime(60_000);
+    expect(notifications.value).toHaveLength(1);
   });
 
   it('keeps a custom icon', () => {

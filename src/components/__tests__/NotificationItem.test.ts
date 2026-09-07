@@ -102,12 +102,46 @@ describe('NotificationItem', () => {
     expect(wrapper.find('.notification__close').exists()).toBe(false);
   });
 
-  it('renders the icon when set', () => {
+  it('renders the custom icon as an img when set', () => {
     const wrapper = mount(NotificationItem, {
       props: { notification: baseNotification({ icon: 'icon.svg' }) }
     });
 
-    expect(wrapper.find('.notification__icon').attributes('src')).toBe('icon.svg');
+    expect(wrapper.find('img.notification__icon').attributes('src')).toBe('icon.svg');
+  });
+
+  it('renders a built-in inline icon for typed notifications without a custom icon', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'success' }) }
+    });
+
+    const svg = wrapper.find('svg.notification__icon');
+    expect(svg.exists()).toBe(true);
+    expect(wrapper.find('img.notification__icon').exists()).toBe(false);
+  });
+
+  it('built-in icon inherits the text color (fill=currentColor)', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'info' }) }
+    });
+
+    expect(wrapper.find('svg.notification__icon').attributes('fill')).toBe('currentColor');
+  });
+
+  it('renders no icon for the simple type', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'simple' }) }
+    });
+
+    expect(wrapper.find('.notification__icon').exists()).toBe(false);
+  });
+
+  it('shows the close button when duration is negative even if not closable', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ closable: false, duration: -1 }) }
+    });
+
+    expect(wrapper.find('.notification__close').exists()).toBe(true);
   });
 
   it('removes the notification from the store on close click', async () => {
