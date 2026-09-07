@@ -30,6 +30,12 @@ const meta: Meta<NotificationOptions> = {
     closable: {
       control: { type: 'boolean' },
     },
+    closeOnClick: {
+      control: { type: 'boolean' },
+    },
+    pauseOnHover: {
+      control: { type: 'boolean' },
+    },
     duration: {
       control: { type: 'number' },
     },

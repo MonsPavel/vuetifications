@@ -48,9 +48,7 @@
   },
   "homepage": "https://github.com/MonsPavel/vuetifications#readme",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "lint": "npm run lint:eslint && npm run lint:types",
     "lint:eslint": "eslint ./",
     "lint:fix": "eslint ./ --fix",

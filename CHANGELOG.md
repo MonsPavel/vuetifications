@@ -10,24 +10,6 @@
 
 * small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
 
-## [1.6.3](https://github.com/MonsPavel/vuetifications/compare/v1.6.2...v1.6.3) (2026-06-20)
-
-### Bug Fixes
-
-* small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
-
-## [1.6.3](https://github.com/MonsPavel/vuetifications/compare/v1.6.2...v1.6.3) (2026-06-20)
-
-### Bug Fixes
-
-* small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
-
-## [1.6.3](https://github.com/MonsPavel/vuetifications/compare/v1.6.2...v1.6.3) (2026-06-20)
-
-### Bug Fixes
-
-* small refactoring ([#33](https://github.com/MonsPavel/vuetifications/issues/33)) ([f54d097](https://github.com/MonsPavel/vuetifications/commit/f54d0970005302166059c533e777109a416bd574))
-
 ## [1.6.2](https://github.com/MonsPavel/vuetifications/compare/v1.6.1...v1.6.2) (2025-09-17)
 
 ### Bug Fixes
@@ -142,22 +124,6 @@
 ### Features
 
 * add icons support ([7579546](https://github.com/MonsPavel/vuetifications/commit/757954655506869b18ca6869ffcd97caf7ac0422))
-
-## [1.1.0](https://github.com/MonsPavel/vuetifications/compare/v1.0.0...v1.1.0) (2025-09-06)
-
-### Features
-
-* add icons support ([7579546](https://github.com/MonsPavel/vuetifications/commit/757954655506869b18ca6869ffcd97caf7ac0422))
-
-## 1.0.0 (2025-09-05)
-
-### ⚠ BREAKING CHANGES
-
-* v1
-
-### Features
-
-* v1 ([9fbc76f](https://github.com/MonsPavel/vuetifications/commit/9fbc76f6e58e06c0f3aea82bbe0a55fc0a101216))
 
 ## 1.0.0 (2025-09-05)
 
