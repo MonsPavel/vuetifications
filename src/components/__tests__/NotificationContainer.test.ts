@@ -112,6 +112,36 @@ describe('NotificationContainer', () => {
     expect(wrapper.find('[role="status"]').text()).toBe('gone');
   });
 
+  it('queues announcements when several notifications are added in the same tick', async () => {
+    const wrapper = mount(NotificationContainer);
+
+    add({ message: 'first announcement', duration: 0 });
+    add({ message: 'second announcement', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('first announcement');
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(wrapper.find('[role="status"]').text()).toBe('second announcement');
+  });
+
+  it('announces queued items in the assertive region without losing the polite one', async () => {
+    const wrapper = mount(NotificationContainer);
+
+    add({ message: 'note', duration: 0 });
+    add({ message: 'failure', type: 'error', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('note');
+    expect(wrapper.find('[role="alert"]').text()).toBe('');
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(wrapper.find('[role="status"]').text()).toBe('note');
+    expect(wrapper.find('[role="alert"]').text()).toBe('failure');
+  });
+
   it('keeps notifications ordered by insertion within one position', () => {
     add({ message: 'first', position: 'top-right', duration: 0 });
     add({ message: 'second', position: 'top-right', duration: 0 });
