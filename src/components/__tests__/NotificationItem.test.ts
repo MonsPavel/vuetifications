@@ -102,6 +102,60 @@ describe('NotificationItem', () => {
     expect(wrapper.find('.notification__close').exists()).toBe(false);
   });
 
+  it('closes on click when closeOnClick is set', async () => {
+    const id = add({ message: 'click me', duration: 0, closeOnClick: true });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, { props: { notification: stored } });
+    await wrapper.trigger('click');
+
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+  });
+
+  it('does not close on click by default', async () => {
+    const id = add({ message: 'stay', duration: 0 });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, { props: { notification: stored } });
+    await wrapper.trigger('click');
+
+    expect(notifications.value.find(n => n.id === id)).toBeDefined();
+  });
+
+  it('pauses the timer on mouse enter and resumes on mouse leave', async () => {
+    vi.useFakeTimers();
+
+    const id = add({ message: 'hover me', duration: 1000 });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, { props: { notification: stored } });
+
+    await wrapper.trigger('mouseenter');
+    vi.advanceTimersByTime(60_000);
+    expect(notifications.value.find(n => n.id === id)).toBeDefined();
+
+    await wrapper.trigger('mouseleave');
+    vi.advanceTimersByTime(1000);
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+
+    vi.useRealTimers();
+  });
+
+  it('keeps the timer running on hover when pauseOnHover is false', async () => {
+    vi.useFakeTimers();
+
+    const id = add({ message: 'no pause', duration: 1000, pauseOnHover: false });
+    const stored = notifications.value.find(n => n.id === id)!;
+
+    const wrapper = mount(NotificationItem, { props: { notification: stored } });
+
+    await wrapper.trigger('mouseenter');
+    vi.advanceTimersByTime(1000);
+    expect(notifications.value.find(n => n.id === id)).toBeUndefined();
+
+    vi.useRealTimers();
+  });
+
   it('renders the custom icon as an img when set', () => {
     const wrapper = mount(NotificationItem, {
       props: { notification: baseNotification({ icon: 'icon.svg' }) }
