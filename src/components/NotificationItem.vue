@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
 import { notificationStore, notificationsKey } from '../core/useNotifications';
+import { NotificationIcon } from '../utils/icons';
 
 import type { Notification } from '../types/notifications';
 
@@ -11,7 +12,8 @@ const { notification } = defineProps<{
 // Стор берётся из контекста хост-приложения; без провайдера — дефолтный синглтон
 const store = inject(notificationsKey, notificationStore);
 
-const showCloseBtn = computed(() => (notification.closable || notification.duration === 0))
+// duration <= 0 (включая отрицательную) — постоянный тост, обязан быть закрываемым
+const showCloseBtn = computed(() => (notification.closable || (notification.duration ?? 0) <= 0))
 
 const notificationClasses = computed(() => ([
   `notification--${notification.type}`,
@@ -32,6 +34,11 @@ const notificationClasses = computed(() => ([
     @focusout="store.resume(notification.id)"
     @keydown.escape="store.remove(notification.id)"
   >
+    <NotificationIcon
+      v-if="!notification.icon && notification.type && notification.type !== 'simple'"
+      :type="notification.type"
+    />
+
     <img
       v-if="notification.icon"
       :src="notification.icon"

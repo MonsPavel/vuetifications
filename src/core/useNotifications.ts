@@ -5,8 +5,6 @@ import type { Notification, NotificationOptions } from '../types/notifications'
 
 import { defaultOptions } from '../constants/notification'
 
-import { getIcon } from '../utils/icons'
-
 export interface NotificationsStoreOptions {
   /** Дефолты, вливаемые в каждое уведомление этого стора */
   defaults?: Partial<NotificationOptions>;
@@ -49,10 +47,6 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
       ...defaults,
       ...input
     };
-
-    if (!n.icon && n.type) {
-      n.icon = getIcon(n.type);
-    }
 
     notifications.value.push(n);
 
