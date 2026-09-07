@@ -3,21 +3,27 @@
   "private": false,
   "version": "1.7.0",
   "type": "module",
-  "main": "./dist/vuetifications.umd.js",
-  "module": "./dist/vuetifications.es.js",
+  "main": "./dist/vuetifications.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/vuetifications.es.js",
-      "require": "./dist/vuetifications.umd.js"
+      "import": "./dist/vuetifications.js",
+      "default": "./dist/vuetifications.js"
     },
-    "./vuetifications.css": "./dist/vuetifications.css"
+    "./vuetifications.css": "./dist/vuetifications.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md"
   ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Mons Pavel <monspavel@gmail.com>",
   "description": "Vuejs notifications",
   "repository": {
@@ -58,7 +64,7 @@
     "storybook:deploy": "storybook build && gh-pages -d storybook-static"
   },
   "peerDependencies": {
-    "vue": "^3.0.0"
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
@@ -91,6 +97,7 @@
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4",
+    "vue": "^3.5.42",
     "vue-tsc": "^3.0.5"
   }
 }
