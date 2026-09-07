@@ -153,6 +153,60 @@ describe('Vuetifications plugin (app.use)', () => {
     expect(document.querySelectorAll('.notification')).toHaveLength(0);
   });
 
+  it('forwards maxVisible to the plugin store', async () => {
+    mountHostApp({ defaults: { duration: 0 }, maxVisible: 1 });
+
+    notify({ message: 'one' });
+    notify({ message: 'two' });
+
+    await waitFor(() => document.querySelectorAll('.notification').length === 1);
+
+    expect(document.querySelectorAll('.notification')).toHaveLength(1);
+  });
+
+  it('notify.promise updates the originating store, not the current active store', async () => {
+    const storeA = createNotificationsStore();
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const app = createApp({ render: () => h('div') });
+    app.use(Vuetifications, { store: storeA, defaults: { duration: 0 } });
+    app.mount(root);
+    hostApp = app;
+
+    let resolvePromise: (value: string) => void;
+    const promise = new Promise<string>(resolve => { resolvePromise = resolve; });
+
+    notify.promise(promise, { loading: 'loading', success: 'done' });
+    app.unmount(); // активный стор сброшен, активным становится синглтон
+
+    resolvePromise!('payload');
+    await promise;
+    await nextTick();
+
+    expect(storeA.notifications.value[0]).toMatchObject({ message: 'done', type: 'success' });
+    expect(notifications.value).toHaveLength(0);
+  });
+
+  it('notify.promise honors the plugin default duration for the final toast', async () => {
+    vi.useFakeTimers();
+
+    mountHostApp({ defaults: { duration: 8000 } });
+
+    notify.promise(Promise.resolve('ok'), { loading: 'loading', success: 'done' });
+    await Promise.resolve();
+    await Promise.resolve();
+    await nextTick();
+    expect(document.querySelectorAll('.notification')).toHaveLength(1);
+
+    vi.advanceTimersByTime(3000);
+    expect(document.querySelectorAll('.notification')).toHaveLength(1);
+
+    vi.advanceTimersByTime(5000);
+    expect(document.querySelectorAll('.notification')).toHaveLength(0);
+
+    vi.useRealTimers();
+  });
+
   it('is a no-op on the server (no document)', () => {
     vi.stubGlobal('document', undefined);
 

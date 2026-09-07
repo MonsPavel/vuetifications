@@ -130,6 +130,48 @@ describe('createNotificationsStore', () => {
     expect(() => store.update(999_999, { message: 'ghost' })).not.toThrow();
   });
 
+  it('remove() discards a queued notification without promoting others', () => {
+    const store = createNotificationsStore({ maxVisible: 1 });
+
+    store.add({ message: 'visible', duration: 0 });
+    const queuedId = store.add({ message: 'queued', duration: 0 });
+
+    store.remove(queuedId);
+    store.remove(store.notifications.value[0].id);
+
+    expect(store.notifications.value).toHaveLength(0);
+  });
+
+  it('update() applies to a queued notification and is honored when it is shown', () => {
+    const store = createNotificationsStore({ maxVisible: 1 });
+
+    const visibleId = store.add({ message: 'visible', duration: 0 });
+    const queuedId = store.add({ message: 'queued', duration: 0 });
+
+    store.update(queuedId, { message: 'queued-updated', type: 'error' });
+    store.remove(visibleId);
+
+    expect(store.notifications.value[0]).toMatchObject({ id: queuedId, message: 'queued-updated', type: 'error' });
+  });
+
+  it('update() keeps the timer paused if it was paused before the update', () => {
+    vi.useFakeTimers();
+    const store = createNotificationsStore();
+
+    const id = store.add({ message: 'x', duration: 5000 });
+    store.pause(id);
+    store.update(id, { duration: 10000 });
+
+    vi.advanceTimersByTime(60_000);
+    expect(store.notifications.value).toHaveLength(1);
+
+    store.resume(id);
+    vi.advanceTimersByTime(10_000);
+    expect(store.notifications.value).toHaveLength(0);
+
+    vi.useRealTimers();
+  });
+
   it('runs timers per store without cross-store effects', () => {
     vi.useFakeTimers();
     const a = createNotificationsStore();

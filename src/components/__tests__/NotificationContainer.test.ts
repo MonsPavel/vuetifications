@@ -142,6 +142,17 @@ describe('NotificationContainer', () => {
     expect(wrapper.find('[role="alert"]').text()).toBe('failure');
   });
 
+  it('does not re-announce notifications that predate the container mount', async () => {
+    add({ message: 'pre-existing', duration: 0 });
+
+    const wrapper = mount(NotificationContainer);
+
+    add({ message: 'fresh', duration: 0 });
+    await nextTick();
+
+    expect(wrapper.find('[role="status"]').text()).toBe('fresh');
+  });
+
   it('keeps notifications ordered by insertion within one position', () => {
     add({ message: 'first', position: 'top-right', duration: 0 });
     add({ message: 'second', position: 'top-right', duration: 0 });
