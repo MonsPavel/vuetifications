@@ -18,10 +18,45 @@ const notificationsByPosition = computed(() =>
   }, {} as Record<NotificationPosition, typeof store.notifications.value>)
 )
 
-// Постоянные live-регионы: динамически вставленный role="status" озвучивается ненадёжно
+// Постоянные live-регионы: динамически вставленный role="status" озвучивается ненадёжно.
+// Анонсы ставятся в очередь: скринридер не слышит два изменения текста за один тик,
+// поэтому каждый анонс выставляется по очереди с интервалом.
 const politeMessage = ref('');
 const assertiveMessage = ref('');
 let lastAnnouncedId = 0;
+
+interface Announcement {
+  assertive: boolean;
+  text: string;
+}
+
+const announcementQueue: Announcement[] = [];
+let drainingAnnouncements = false;
+const ANNOUNCE_INTERVAL_MS = 100;
+
+function drainAnnouncements() {
+  if (drainingAnnouncements) return;
+  drainingAnnouncements = true;
+
+  const next = () => {
+    const announcement = announcementQueue.shift();
+
+    if (!announcement) {
+      drainingAnnouncements = false;
+      return;
+    }
+
+    if (announcement.assertive) {
+      assertiveMessage.value = announcement.text;
+    } else {
+      politeMessage.value = announcement.text;
+    }
+
+    setTimeout(next, ANNOUNCE_INTERVAL_MS);
+  };
+
+  next();
+}
 
 watch(
   // максимальный id монотонно растёт: ловим добавления даже когда add+remove
@@ -32,14 +67,13 @@ watch(
       if (n.id <= lastAnnouncedId) continue;
       lastAnnouncedId = n.id;
 
-      const text = [n.title, n.message].filter(Boolean).join('. ');
-
-      if (n.type === 'error') {
-        assertiveMessage.value = text;
-      } else {
-        politeMessage.value = text;
-      }
+      announcementQueue.push({
+        assertive: n.type === 'error',
+        text: [n.title, n.message].filter(Boolean).join('. ')
+      });
     }
+
+    drainAnnouncements();
   }
 )
 </script>
