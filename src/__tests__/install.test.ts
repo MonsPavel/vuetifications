@@ -5,7 +5,7 @@ import { createApp, defineComponent, h, nextTick } from 'vue';
 import { notify, Vuetifications } from '../plugin';
 import { notificationStore } from '../core/useNotifications';
 import { useNotifications } from '../core/useNotifications';
-import { createNotificationsStore } from '../core/useNotifications';
+import { createNotificationsStore, getActiveStore } from '../core/useNotifications';
 import { unmount } from '../core/mount';
 import { clear, remove } from '../index';
 
@@ -191,6 +191,7 @@ describe('Vuetifications plugin (app.use)', () => {
     vi.useFakeTimers();
 
     mountHostApp({ defaults: { duration: 8000 } });
+    const store = getActiveStore();
 
     notify.promise(Promise.resolve('ok'), { loading: 'loading', success: 'done' });
     await Promise.resolve();
@@ -199,10 +200,10 @@ describe('Vuetifications plugin (app.use)', () => {
     expect(document.querySelectorAll('.notification')).toHaveLength(1);
 
     vi.advanceTimersByTime(3000);
-    expect(document.querySelectorAll('.notification')).toHaveLength(1);
+    expect(store.notifications.value).toHaveLength(1);
 
     vi.advanceTimersByTime(5000);
-    expect(document.querySelectorAll('.notification')).toHaveLength(0);
+    expect(store.notifications.value).toHaveLength(0);
 
     vi.useRealTimers();
   });

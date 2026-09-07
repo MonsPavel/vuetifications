@@ -14,6 +14,8 @@ import type { NotificationHandle, NotificationOptions, NotificationType, Promise
 export interface VuetificationsPluginOptions {
   /** Дефолты для каждого уведомления приложения */
   defaults?: Partial<NotificationOptions>;
+  /** Максимум одновременных уведомлений; лишние ждут в очереди */
+  maxVisible?: number;
   /** Готовый стор (иначе создаётся из defaults) */
   store?: NotificationsStore;
 }
@@ -69,6 +71,8 @@ const normalizeContent = (content?: PromiseNotificationContent): Partial<Notific
  * затем заменяет его на success/error. Исходный промис возвращается как есть.
  */
 notify.promise = <T>(promise: Promise<T>, options: PromiseNotificationsOptions = {}): Promise<T> => {
+  // Фиксируем стор на момент вызова: приложение может размонтироваться до резолва промиса
+  const store = getActiveStore();
   const handle = addToast({
     message: '',
     ...normalizeContent(options.loading),
@@ -83,9 +87,9 @@ notify.promise = <T>(promise: Promise<T>, options: PromiseNotificationsOptions =
       return;
     }
 
-    getActiveStore().update(handle.id, {
+    store.update(handle.id, {
       type: fallbackType,
-      duration: defaultOptions.duration,
+      duration: store.defaults.duration ?? defaultOptions.duration,
       ...normalizeContent(content)
     });
   };
@@ -115,7 +119,11 @@ export { notify }
  */
 export const Vuetifications: Plugin<[VuetificationsPluginOptions?]> = {
   install(app: App, options: VuetificationsPluginOptions = {}) {
-    const store = options.store ?? createNotificationsStore({ defaults: options.defaults });
+    const ownsStore = !options.store;
+    const store = options.store ?? createNotificationsStore({
+      defaults: options.defaults,
+      maxVisible: options.maxVisible
+    });
 
     setActiveStore(store);
     app.provide(notificationsKey, store);
@@ -136,7 +144,10 @@ export const Vuetifications: Plugin<[VuetificationsPluginOptions?]> = {
     app.onUnmount(() => {
       vueRender(null, container);
       container.remove();
-      store.clear();
+      // Пользовательский стор не наш — не очищаем его при размонтировании приложения
+      if (ownsStore) {
+        store.clear();
+      }
       if (getActiveStore() === store) {
         setActiveStore(null);
       }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 import { useNotifications } from '../core/useNotifications';
 
@@ -23,7 +23,13 @@ const notificationsByPosition = computed(() =>
 // поэтому каждый анонс выставляется по очереди с интервалом.
 const politeMessage = ref('');
 const assertiveMessage = ref('');
-let lastAnnouncedId = 0;
+// Уведомления, существовавшие до монтирования контейнера, не переозвучиваем
+let lastAnnouncedId = store.notifications.value.reduce((max, n) => Math.max(max, n.id), 0);
+let disposed = false;
+
+onUnmounted(() => {
+  disposed = true;
+});
 
 interface Announcement {
   assertive: boolean;
@@ -39,6 +45,11 @@ function drainAnnouncements() {
   drainingAnnouncements = true;
 
   const next = () => {
+    if (disposed) {
+      drainingAnnouncements = false;
+      return;
+    }
+
     const announcement = announcementQueue.shift();
 
     if (!announcement) {

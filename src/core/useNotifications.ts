@@ -14,6 +14,8 @@ export interface NotificationsStoreOptions {
 
 export interface NotificationsStore {
   notifications: Ref<Notification[]>;
+  /** Итоговые дефолты стора (defaultOptions + options.defaults) */
+  defaults: Partial<NotificationOptions>;
   add: (input: NotificationOptions) => number;
   update: (id: number, options: Partial<NotificationOptions>) => void;
   remove: (id: number) => void;
@@ -71,7 +73,14 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
   const update = (id: number, updateOptions: Partial<NotificationOptions>) => {
     const index = notifications.value.findIndex(n => n.id === id);
 
-    if (index === -1) return;
+    if (index === -1) {
+      // Тост ждёт в очереди maxVisible: правим на месте, таймер стартует при показе
+      const pending = pendingQueue.find(n => n.id === id);
+      if (pending) {
+        Object.assign(pending, updateOptions);
+      }
+      return;
+    }
 
     const current = notifications.value[index];
     const updated: Notification = { ...current, ...updateOptions, id };
@@ -79,12 +88,16 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
 
     if ((current.duration ?? 0) !== (updated.duration ?? 0)) {
       const timer = timerMap.get(id);
+      const wasPaused = timer?.paused ?? false;
       if (timer) {
         clearTimeout(timer.timeoutId);
         timerMap.delete(id);
       }
       if (updated.duration && updated.duration > 0) {
         startTimer(id, updated.duration);
+        if (wasPaused) {
+          pause(id);
+        }
       }
     }
   };
@@ -111,9 +124,14 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
 
     if (index > -1) {
       notifications.value.splice(index, 1);
+      flushPending();
+      return;
     }
 
-    flushPending();
+    const pendingIndex = pendingQueue.findIndex(n => n.id === id);
+    if (pendingIndex > -1) {
+      pendingQueue.splice(pendingIndex, 1);
+    }
   };
 
   const clear = () => {
@@ -144,7 +162,7 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
     }, timer.remaining);
   };
 
-  return { notifications, add, update, remove, clear, pause, resume };
+  return { notifications, defaults, add, update, remove, clear, pause, resume };
 }
 
 // Дефолтный синглтон: fallback для вызова notify() вне setup и для обратной совместимости
