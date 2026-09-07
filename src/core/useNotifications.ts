@@ -1,13 +1,15 @@
 import { ref } from 'vue';
 
-import type { Notification  } from '../types/notifications'
+import type { Notification, NotificationOptions } from '../types/notifications'
 
 import { defaultOptions } from '../constants/notification'
 
 import { getIcon } from '../utils/icons'
 
-const notifications = ref<Notification[]>([]);
-let seed = 0;
+export interface NotificationsStoreOptions {
+  /** Дефолты, вливаемые в каждое уведомление этого стора */
+  defaults?: Partial<NotificationOptions>;
+}
 
 interface TimerState {
   timeoutId: ReturnType<typeof setTimeout>;
@@ -16,9 +18,12 @@ interface TimerState {
   paused: boolean;
 }
 
-const timerMap = new Map<number, TimerState>();
+export function createNotificationsStore(options: NotificationsStoreOptions = {}) {
+  const defaults: Partial<NotificationOptions> = { ...defaultOptions, ...options.defaults };
+  const notifications = ref<Notification[]>([]);
+  let seed = 0;
+  const timerMap = new Map<number, TimerState>();
 
-export function useNotifications() {
   const startTimer = (id: number, duration: number) => {
     const timeoutId = setTimeout(() => {
       timerMap.delete(id);
@@ -28,11 +33,11 @@ export function useNotifications() {
     timerMap.set(id, { timeoutId, startedAt: Date.now(), remaining: duration, paused: false });
   };
 
-  const add = (options: Omit<Notification, 'id'>) => {
+  const add = (input: NotificationOptions) => {
     const n: Notification = {
       id: ++seed,
-      ...defaultOptions,
-      ...options
+      ...defaults,
+      ...input
     };
 
     if (!n.icon && n.type) {
@@ -93,12 +98,14 @@ export function useNotifications() {
   return { notifications, add, remove, clear, pause, resume };
 }
 
-const notificationStore = useNotifications();
+export type NotificationsStore = ReturnType<typeof createNotificationsStore>;
+
+// Дефолтный синглтон: fallback для вызова notify() вне setup и для обратной совместимости
+export const notificationStore = createNotificationsStore();
 
 const { add, remove, clear, pause, resume } = notificationStore
 
 export {
-  notificationStore,
   add,
   remove,
   clear,

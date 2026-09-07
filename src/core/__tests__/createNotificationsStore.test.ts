@@ -25,7 +25,7 @@ describe('createNotificationsStore', () => {
   });
 
   it('applies custom defaults to every added notification', () => {
-    const store = createNotificationsStore({ duration: 100, position: 'bottom-left' });
+    const store = createNotificationsStore({ defaults: { duration: 100, position: 'bottom-left' } });
 
     store.add({ message: 'x' });
 
@@ -37,7 +37,7 @@ describe('createNotificationsStore', () => {
   });
 
   it('lets explicit options beat custom defaults', () => {
-    const store = createNotificationsStore({ duration: 100 });
+    const store = createNotificationsStore({ defaults: { duration: 100 } });
 
     store.add({ message: 'x', duration: 5000 });
 
