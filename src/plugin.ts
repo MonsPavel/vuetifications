@@ -70,6 +70,7 @@ const normalizeContent = (content?: PromiseNotificationContent): Partial<Notific
  */
 notify.promise = <T>(promise: Promise<T>, options: PromiseNotificationsOptions = {}): Promise<T> => {
   const handle = addToast({
+    message: '',
     ...normalizeContent(options.loading),
     type: 'info',
     duration: 0,

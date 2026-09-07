@@ -1,3 +1,4 @@
+/* eslint-disable vue/one-component-per-file -- тестовые хост-компоненты */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick } from 'vue';
 
