@@ -53,9 +53,4 @@ export const NotificationIcon: FunctionalComponent<NotificationIconProps> = ({ t
   );
 };
 
-NotificationIcon.props = {
-  type: {
-    type: String,
-    required: false
-  }
-};
+NotificationIcon.props = ['type'];
