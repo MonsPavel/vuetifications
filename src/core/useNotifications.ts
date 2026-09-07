@@ -1,5 +1,6 @@
-import { ref } from 'vue';
+import { getCurrentInstance, inject, ref } from 'vue';
 
+import type { InjectionKey, Ref } from 'vue';
 import type { Notification, NotificationOptions } from '../types/notifications'
 
 import { defaultOptions } from '../constants/notification'
@@ -11,6 +12,15 @@ export interface NotificationsStoreOptions {
   defaults?: Partial<NotificationOptions>;
 }
 
+export interface NotificationsStore {
+  notifications: Ref<Notification[]>;
+  add: (input: NotificationOptions) => number;
+  remove: (id: number) => void;
+  clear: () => void;
+  pause: (id: number) => void;
+  resume: (id: number) => void;
+}
+
 interface TimerState {
   timeoutId: ReturnType<typeof setTimeout>;
   startedAt: number;
@@ -18,7 +28,7 @@ interface TimerState {
   paused: boolean;
 }
 
-export function createNotificationsStore(options: NotificationsStoreOptions = {}) {
+export function createNotificationsStore(options: NotificationsStoreOptions = {}): NotificationsStore {
   const defaults: Partial<NotificationOptions> = { ...defaultOptions, ...options.defaults };
   const notifications = ref<Notification[]>([]);
   let seed = 0;
@@ -98,17 +108,45 @@ export function createNotificationsStore(options: NotificationsStoreOptions = {}
   return { notifications, add, remove, clear, pause, resume };
 }
 
-export type NotificationsStore = ReturnType<typeof createNotificationsStore>;
-
 // Дефолтный синглтон: fallback для вызова notify() вне setup и для обратной совместимости
 export const notificationStore = createNotificationsStore();
 
-const { add, remove, clear, pause, resume } = notificationStore
+const { add, pause, resume } = notificationStore
 
 export {
   add,
-  remove,
-  clear,
   pause,
   resume
+}
+
+/**
+ * Активный стор: назначается плагином при app.use(),
+ * чтобы публичные remove/clear и notify() вне setup работали с ним.
+ */
+let activeStore: NotificationsStore | null = null;
+
+export function setActiveStore(store: NotificationsStore | null) {
+  activeStore = store;
+}
+
+export function getActiveStore(): NotificationsStore {
+  return activeStore ?? notificationStore;
+}
+
+export function remove(id: number) {
+  getActiveStore().remove(id);
+}
+
+export function clear() {
+  getActiveStore().clear();
+}
+
+/** Ключ provide/inject для стора внутри хост-приложения */
+export const notificationsKey: InjectionKey<NotificationsStore> = Symbol('vuetifications');
+
+/** Стор текущего приложения (через inject) или дефолтный синглтон вне setup */
+export function useNotifications(): NotificationsStore {
+  return getCurrentInstance()
+    ? inject(notificationsKey, notificationStore)
+    : notificationStore;
 }

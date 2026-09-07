@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import { notificationStore as store } from '../core/useNotifications';
+import { useNotifications } from '../core/useNotifications';
 
 import NotificationItem from './NotificationItem.vue';
 
 import { POSITIONS } from '../constants/notification';
 
 import type { NotificationPosition } from '../types/notifications';
+
+const store = useNotifications();
 
 const notificationsByPosition = computed(() =>
   store.notifications.value.reduce((groups, n) => {

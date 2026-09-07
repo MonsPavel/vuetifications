@@ -8,15 +8,26 @@ import { createNotificationsStore } from '../core/useNotifications';
 import { unmount } from '../core/mount';
 import { clear, remove } from '../index';
 
+import type { VuetificationsPluginOptions } from '../plugin';
+
 const { notifications, remove: removeFromDefault } = notificationStore;
 
 const clearDefaultStore = () => {
   for (const n of [...notifications.value]) removeFromDefault(n.id);
 };
 
+// Элемент держится в DOM до конца leave-анимации: ждём факта, а не тайминга
+const waitFor = async (predicate: () => boolean, timeout = 1000) => {
+  const start = Date.now();
+  while (!predicate()) {
+    if (Date.now() - start > timeout) throw new Error('waitFor: condition not met');
+    await new Promise(resolve => setTimeout(resolve, 10));
+  }
+};
+
 let hostApp: ReturnType<typeof createApp> | null = null;
 
-const mountHostApp = (options: Parameters<typeof Vuetifications.install>[1] = {}) => {
+const mountHostApp = (options: VuetificationsPluginOptions = {}) => {
   const root = document.createElement('div');
   document.body.appendChild(root);
   hostApp = createApp({ render: () => h('div', 'host content') });
@@ -120,13 +131,12 @@ describe('Vuetifications plugin (app.use)', () => {
     mountHostApp({ defaults: { duration: 0 } });
 
     const handle = notify({ message: 'active store target' });
-    await nextTick();
-    expect(document.body.textContent).toContain('active store target');
+    await waitFor(() => document.querySelectorAll('.notification').length === 1);
 
     remove(handle.id);
-    await nextTick();
+    await waitFor(() => document.querySelectorAll('.notification').length === 0);
 
-    expect(document.body.textContent).not.toContain('active store target');
+    expect(document.querySelectorAll('.notification')).toHaveLength(0);
   });
 
   it('public clear() targets the active plugin store', async () => {
@@ -134,13 +144,12 @@ describe('Vuetifications plugin (app.use)', () => {
 
     notify({ message: 'first' });
     notify({ message: 'second' });
-    await nextTick();
+    await waitFor(() => document.querySelectorAll('.notification').length === 2);
 
     clear();
-    await nextTick();
+    await waitFor(() => document.querySelectorAll('.notification').length === 0);
 
-    expect(document.querySelector('.notifications-root')!.textContent).not.toContain('first');
-    expect(document.querySelector('.notifications-root')!.textContent).not.toContain('second');
+    expect(document.querySelectorAll('.notification')).toHaveLength(0);
   });
 
   it('is a no-op on the server (no document)', () => {
