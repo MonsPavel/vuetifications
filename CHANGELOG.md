@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/MonsPavel/vuetifications/compare/v1.7.0...v1.8.0) (2026-09-08)
+
+### Features
+
+* improve notification interactions and accessibility ([#36](https://github.com/MonsPavel/vuetifications/issues/36)) ([ee0f6da](https://github.com/MonsPavel/vuetifications/commit/ee0f6da29947e696240e47ff944d1fc9af726c0a))
+
 ## [1.7.0](https://github.com/MonsPavel/vuetifications/compare/v1.6.3...v1.7.0) (2026-07-04)
 
 ### Features
