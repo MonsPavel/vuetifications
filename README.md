@@ -25,6 +25,8 @@ You can try notifications in our [Storybook Demo](https://MonsPavel.github.io/vu
 
 ## 📦 Installation
 
+Use **Vue 3.2 or newer**. See [Compatibility](#-compatibility) for the legacy peer-range limitation.
+
 ```bash
 npm install vuetifications
 # or
@@ -48,17 +50,27 @@ import 'vuetifications/vuetifications.css'
 createApp(App).mount('#app')
 ```
 
-```ts
-// inside any component
+Then call `notify` from a component event handler. The first call creates the
+notification container automatically; `app.use()` is not required.
+
+```vue
+<script setup lang="ts">
 import { notify } from 'vuetifications'
 
-notify({
-  title: 'Success!',
-  message: 'This notification works!',
-  type: 'success',
-  position: 'top-right',
-  duration: 3000
-})
+function showNotification() {
+  notify({
+    title: 'Success!',
+    message: 'This notification works!',
+    type: 'success',
+    position: 'top-right',
+    duration: 3000
+  })
+}
+</script>
+
+<template>
+  <button @click="showNotification">Show notification</button>
+</template>
 ```
 
 ---
@@ -85,10 +97,43 @@ interface NotificationOptions {
   pauseOnHover?: boolean             // default: false
 }
 
-notify(options: NotificationOptions | string): { id: number; close(): void }
+interface NotificationHandle {
+  id: number
+  close(): void
+}
+
+declare function notify(options: NotificationOptions | string): NotificationHandle
 ```
 
 ---
+
+### Closing notifications from code
+
+`notify` returns a handle. Call `handle.close()` later, for example from a cancel
+button or when an operation finishes. Calling it immediately after `notify` closes
+the toast immediately.
+
+```ts
+import { notify, remove, clear } from 'vuetifications'
+
+const handle = notify({ message: 'An operation is running…', duration: 0 })
+
+function dismissThisNotification() {
+  handle.close()
+  // Alternatively: remove(handle.id)
+}
+
+function dismissById(id: number) {
+  remove(id)
+}
+
+function dismissAllNotifications() {
+  clear()
+}
+```
+
+`remove(id)` ignores an already removed or unknown id. `clear()` closes all
+notifications in the shared store. Keep `notify` calls on the client in SSR apps.
 
 ## Updating from 1.7
 
@@ -97,12 +142,13 @@ range, and notification handles. No plugin installation or store migration is ne
 Both new options are opt-in:
 
 ```ts
-const handle = notify({
+import { notify } from 'vuetifications'
+
+notify({
   message: 'Click to dismiss, or hover to keep reading',
   closeOnClick: true,
   pauseOnHover: true
 })
-handle.close()
 ```
 
 `notify('message')` and all type shortcuts also return a handle. Use the existing
@@ -144,20 +190,11 @@ Instead of always passing the `type` option, you can use convenient shortcuts:
 ```ts
 import { notify } from 'vuetifications'
 
-// Success
-notify.success(options)
-
-// Error
-notify.error(options)
-
-// Info
-notify.info(options)
-
-// Warning
-notify.warning(options)
-
-// Simple
-notify.simple(options)
+notify.success('Saved!')
+notify.error({ message: 'Could not save', closable: true })
+notify.info('A new update is available')
+notify.warning('Please check your input')
+notify.simple('A message without a built-in icon')
 
 ```
 
@@ -239,13 +276,41 @@ Available positions: `top-left`, `top-right`, `bottom-left`, `bottom-right`.
 
 ## 🧩 Compatibility
 
-- Existing Vue peer range and ESM/UMD entry points are unchanged.
-- Runtime smoke checks pass on Vue **3.2.0**, **3.4.0**, and the current development version.
-- Known pre-existing limitation: Vue **3.0.0** cannot render the current build because
-  its runtime lacks compiler helpers such as `createElementVNode`. This also
-  reproduces on 1.7 source built with the same toolchain. Use Vue **3.2+**;
-  correcting the declared minimum is deferred to the next major release.
-- TypeScript support out of the box
+- Use **Vue 3.2+**. The package still declares the legacy peer range `^3.0.0`,
+  but Vue 3.0.0 cannot render the generated bundle. This limitation predates 1.8;
+  the broad npm range is not a guarantee that Vue 3.0 works.
+- ESM and UMD files retain their existing names; the CSS import path is unchanged.
+- TypeScript types, including `NotificationOptions` and `NotificationHandle`,
+  are exported from `vuetifications`.
+
+### SSR and Nuxt
+
+Call `notify` only in client-side event handlers or `onMounted`:
+
+```ts
+import { onMounted } from 'vue'
+import { notify } from 'vuetifications'
+
+onMounted(() => {
+  notify.info('Welcome!')
+})
+```
+
+In Nuxt, add `vuetifications/vuetifications.css` to the global `css` configuration.
+Avoid calling `notify` at module scope or during server-side setup: 1.x uses a shared
+store, and a server call can add notifications and start timers even though no DOM
+container is mounted. Request-scoped stores are outside the 1.8 release.
+
+### Troubleshooting
+
+- **No styling:** import `vuetifications/vuetifications.css` once in your app entry.
+- **Hover does not pause:** enable `pauseOnHover: true`; its default is `false`.
+- **Click does not close:** enable `closeOnClick: true`, use the close button,
+  or focus the notification and press Escape.
+- **Theme variables have no effect:** set them on `:root` or `body`, not only on
+  your app root element. Notifications are mounted under `document.body`.
+- **Built-in icon styles stopped applying:** use `.notification__icon` instead of
+  `img.notification__icon`; built-in icons are now inline SVG.
 
 ---
 
