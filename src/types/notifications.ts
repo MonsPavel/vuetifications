@@ -20,6 +20,10 @@ export interface NotificationOptions {
   icon?: string;
   closable?: boolean;
   animation?: AnimationPreset;
+  /** Close when clicked (default: false). */
+  closeOnClick?: boolean;
+  /** Pause auto-dismiss while hovered (default: false). */
+  pauseOnHover?: boolean;
 }
 
 export interface Notification extends NotificationOptions {
