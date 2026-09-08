@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 import { notificationStore as store } from '../core/useNotifications';
 
@@ -21,6 +21,35 @@ const politeMessage = ref('');
 const assertiveMessage = ref('');
 let lastAnnouncedId = 0;
 
+// Separate DOM updates keep bursts and identical consecutive messages observable.
+// The interval is not a guarantee of speech completion in a screen reader.
+const announcementQueue: { text: string; assertive: boolean }[] = [];
+let announcementTimer: ReturnType<typeof setTimeout> | undefined;
+const announcementInterval = 100;
+
+function announceNext() {
+  announcementTimer = undefined;
+  const announcement = announcementQueue.shift();
+  if (!announcement) return;
+  const region = announcement.assertive ? assertiveMessage : politeMessage;
+  const publish = () => {
+    region.value = announcement.text;
+    announcementTimer = setTimeout(announceNext, announcementInterval);
+  };
+
+  if (region.value) {
+    region.value = '';
+    announcementTimer = setTimeout(publish, announcementInterval);
+  } else {
+    publish();
+  }
+}
+
+onUnmounted(() => {
+  clearTimeout(announcementTimer);
+  announcementQueue.length = 0;
+});
+
 watch(
   // максимальный id монотонно растёт: ловим добавления даже когда add+remove
   // в одном тике не меняют length
@@ -30,14 +59,12 @@ watch(
       if (n.id <= lastAnnouncedId) continue;
       lastAnnouncedId = n.id;
 
-      const text = [n.title, n.message].filter(Boolean).join('. ');
-
-      if (n.type === 'error') {
-        assertiveMessage.value = text;
-      } else {
-        politeMessage.value = text;
-      }
+      announcementQueue.push({
+        text: [n.title, n.message].filter(Boolean).join('. '),
+        assertive: n.type === 'error',
+      });
     }
+    if (announcementTimer === undefined) announceNext();
   }
 )
 </script>

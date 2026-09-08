@@ -25,6 +25,8 @@ You can try notifications in our [Storybook Demo](https://MonsPavel.github.io/vu
 
 ## 📦 Installation
 
+Use **Vue 3.2 or newer**. See [Compatibility](#-compatibility) for the legacy peer-range limitation.
+
 ```bash
 npm install vuetifications
 # or
@@ -42,49 +44,125 @@ pnpm add vuetifications
 import { createApp } from 'vue'
 import App from './App.vue'
 
-// if styles are in a separate file:
+// Required: the package extracts styles into this file.
 import 'vuetifications/vuetifications.css'
 
 createApp(App).mount('#app')
 ```
 
-```ts
-// inside any component
+Then call `notify` from a component event handler. The first call creates the
+notification container automatically; `app.use()` is not required.
+
+```vue
+<script setup lang="ts">
 import { notify } from 'vuetifications'
 
-notify({
-  title: 'Success!',
-  message: 'This notification works!',
-  type: 'success',
-  position: 'top-right',
-  duration: 3000
-})
+function showNotification() {
+  notify({
+    title: 'Success!',
+    message: 'This notification works!',
+    type: 'success',
+    position: 'top-right',
+    duration: 3000
+  })
+}
+</script>
+
+<template>
+  <button @click="showNotification">Show notification</button>
+</template>
 ```
 
 ---
 
 ## 🧠 API
 
-### `notify(options)`
+### `notify(options | string)`
 
 ```ts
 type NotificationType = 'success' | 'error' | 'info' | 'warning' | 'simple'
 type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 type AnimationPreset = 'slide-fade' | 'fade'  | 'slide'  | 'scale' | 'bounce' | 'flip' | 'zoom' | 'none';
 
-interface NotifyOptions {
+interface NotificationOptions {
   title?: string
   message: string
   icon?: string
   type?: NotificationType           // default: 'info'
   position?: NotificationPosition   // default: 'top-right'
-  duration?: number                 // default: 3000 (ms), 0 — never auto-close
+  duration?: number                 // default: 3000 (ms), <= 0 — never auto-close
   closable?: boolean                // default: false
   animation?: AnimationPreset       // default: 'slide-fade'
+  closeOnClick?: boolean             // default: false
+  pauseOnHover?: boolean             // default: false
 }
 
-notify(options: NotifyOptions): void
+interface NotificationHandle {
+  id: number
+  close(): void
+}
+
+declare function notify(options: NotificationOptions | string): NotificationHandle
 ```
+
+---
+
+### Closing notifications from code
+
+`notify` returns a handle. Call `handle.close()` later, for example from a cancel
+button or when an operation finishes. Calling it immediately after `notify` closes
+the toast immediately.
+
+```ts
+import { notify, remove, clear } from 'vuetifications'
+
+const handle = notify({ message: 'An operation is running…', duration: 0 })
+
+function dismissThisNotification() {
+  handle.close()
+  // Alternatively: remove(handle.id)
+}
+
+function dismissById(id: number) {
+  remove(id)
+}
+
+function dismissAllNotifications() {
+  clear()
+}
+```
+
+`remove(id)` ignores an already removed or unknown id. `clear()` closes all
+notifications in the shared store. Keep `notify` calls on the client in SSR apps.
+
+## Updating from 1.7
+
+The 1.8 improvements keep the existing imports, ESM and UMD filenames, Vue peer
+range, and notification handles. No plugin installation or store migration is needed.
+Both new options are opt-in:
+
+```ts
+import { notify } from 'vuetifications'
+
+notify({
+  message: 'Click to dismiss, or hover to keep reading',
+  closeOnClick: true,
+  pauseOnHover: true
+})
+```
+
+`notify('message')` and all type shortcuts also return a handle. Use the existing
+`remove(id)` and `clear()` exports to dismiss notifications programmatically.
+
+Built-in icons now use inline SVG with the same `.notification__icon` class and
+inherit the notification color. If your custom CSS uses `img.notification__icon`,
+change that selector to `.notification__icon`. Custom icon URLs still render as images.
+Non-positive durations keep a close button even when `closable` is false.
+
+Focus always pauses auto-dismiss; optional hover pause lasts until both hover and
+focus have ended. Live regions queue bursts and clear between repeated messages.
+Actual announcements depend on the browser and screen reader; DOM tests do not
+prove that every message has finished being spoken.
 
 ---
 
@@ -93,12 +171,15 @@ notify(options: NotifyOptions): void
 | Option      | Type                                                                                       | Default       | Description                              |
 |-------------|--------------------------------------------------------------------------------------------|---------------|------------------------------------------|
 | `title`     | `string`                                                                                   | `''`          | Notification title                       |
-| `message`   | `string`                                                                                   | `''`          | Notification message                     |
+| `message`   | `string` | required | Notification message |
 | `type`      | `'success' \| 'error' \| 'info' \| 'warning' \| 'simple'`                                          | `'info'`      | Notification type                        |
 | `position`  | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`                          | `'top-right'` | Notification position                    |
-| `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `0` — disables auto-close |
-| `closable`  | `boolean`                                                                                   | `false`        | Show/Hide close btn                         |
+| `duration`  | `number`                                                                                   | `3000`        | Lifetime (ms). `<= 0` disables auto-close |
+| `closable`  | `boolean`                                                                                   | `false`        | Show close button; always shown for duration <= 0                         |
 | `animation`  | `'slide-fade' \| 'fade' \| 'slide' \| 'scale' \| 'bounce' \| 'flip' \| 'zoom' \| 'none'`   |  `slide-fade`        | Animation style                     |
+| `icon` | `string` | built-in SVG | Custom image URL |
+| `closeOnClick` | `boolean` | `false` | Close when the toast is clicked |
+| `pauseOnHover` | `boolean` | `false` | Pause while the pointer is over the toast |
 
 ---
 
@@ -109,20 +190,11 @@ Instead of always passing the `type` option, you can use convenient shortcuts:
 ```ts
 import { notify } from 'vuetifications'
 
-// Success
-notify.success(options)
-
-// Error
-notify.error(options)
-
-// Info
-notify.info(options)
-
-// Warning
-notify.warning(options)
-
-// Simple
-notify.simple(options)
+notify.success('Saved!')
+notify.error({ message: 'Could not save', closable: true })
+notify.info('A new update is available')
+notify.warning('Please check your input')
+notify.simple('A message without a built-in icon')
 
 ```
 
@@ -132,9 +204,10 @@ notify.simple(options)
 
 Vuetifications provides multiple built-in transition effects:
 
-- `slid-fade` (default)
+- `slide-fade` (default)
 - `fade`
 - `slide`
+- `scale`
 - `bounce`
 - `flip`
 - `zoom`
@@ -154,7 +227,7 @@ notify({
 
 ## 🎨 Theming (CSS Variables)
 
-Vuetifications uses CSS variables. Override them globally or per theme container.
+Vuetifications uses CSS variables. Override them on `:root` or `body`: the notification container is appended to `document.body`.
 
 ```css
 :root {
@@ -164,10 +237,10 @@ Vuetifications uses CSS variables. Override them globally or per theme container
   --notification-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
   --notification-border: 1px solid rgba(0, 0, 0, 0.05);
 
-  --notification-success: #4CAF50;
-  --notification-error: #E85963FF;
-  --notification-info: #2196F3;
-  --notification-warning: #FDF4F2FF;
+  --notification-success: #2E7D32;
+  --notification-error: #C62828;
+  --notification-info: #1565C0;
+  --notification-warning: #FFC107;
   --notification-simple: #FFF;
 
   --notification-padding: 24px;
@@ -203,8 +276,41 @@ Available positions: `top-left`, `top-right`, `bottom-left`, `bottom-right`.
 
 ## 🧩 Compatibility
 
-- Vue **3.x**
-- TypeScript support out of the box
+- Use **Vue 3.2+**. The package still declares the legacy peer range `^3.0.0`,
+  but Vue 3.0.0 cannot render the generated bundle. This limitation predates 1.8;
+  the broad npm range is not a guarantee that Vue 3.0 works.
+- ESM and UMD files retain their existing names; the CSS import path is unchanged.
+- TypeScript types, including `NotificationOptions` and `NotificationHandle`,
+  are exported from `vuetifications`.
+
+### SSR and Nuxt
+
+Call `notify` only in client-side event handlers or `onMounted`:
+
+```ts
+import { onMounted } from 'vue'
+import { notify } from 'vuetifications'
+
+onMounted(() => {
+  notify.info('Welcome!')
+})
+```
+
+In Nuxt, add `vuetifications/vuetifications.css` to the global `css` configuration.
+Avoid calling `notify` at module scope or during server-side setup: 1.x uses a shared
+store, and a server call can add notifications and start timers even though no DOM
+container is mounted. Request-scoped stores are outside the 1.8 release.
+
+### Troubleshooting
+
+- **No styling:** import `vuetifications/vuetifications.css` once in your app entry.
+- **Hover does not pause:** enable `pauseOnHover: true`; its default is `false`.
+- **Click does not close:** enable `closeOnClick: true`, use the close button,
+  or focus the notification and press Escape.
+- **Theme variables have no effect:** set them on `:root` or `body`, not only on
+  your app root element. Notifications are mounted under `document.body`.
+- **Built-in icon styles stopped applying:** use `.notification__icon` instead of
+  `img.notification__icon`; built-in icons are now inline SVG.
 
 ---
 

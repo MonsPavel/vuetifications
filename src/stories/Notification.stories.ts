@@ -1,10 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import type { NotificationOptions } from '../types/notifications';
-import { notify } from '../index';
+import { clear, notify } from '../index';
+import { unmount } from '../core/mount';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 const meta: Meta<NotificationOptions> = {
   title: 'Notifications/Playground',
   tags: ['autodocs'],
+  beforeEach: () => {
+    clear();
+    unmount();
+    return () => { clear(); unmount(); };
+  },
   args: {
     type: 'success',
     title: 'Hello!',
@@ -30,6 +37,8 @@ const meta: Meta<NotificationOptions> = {
     closable: {
       control: { type: 'boolean' },
     },
+    closeOnClick: { control: { type: 'boolean' } },
+    pauseOnHover: { control: { type: 'boolean' } },
     duration: {
       control: { type: 'number' },
     },
@@ -46,12 +55,64 @@ export default meta;
 
 type Story = StoryObj<NotificationOptions>;
 
-export const Playground: Story = {
-  render: (args) => ({
+const render: Story['render'] = (args) => ({
     template: `<button class="storybook-btn" @click="show">Show Notification</button>`,
     setup() {
       const show = () => notify(args);
       return { show };
     }
-  })
+  });
+
+export const Playground: Story = {
+  render,
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button'));
+    const body = within(canvasElement.ownerDocument.body);
+    const close = await body.findByRole('button', { name: 'Close notification' });
+    await expect(canvasElement.ownerDocument.querySelector('svg.notification__icon')).toHaveAttribute('fill', 'currentColor');
+    await userEvent.click(close);
+    await waitFor(() => expect(canvasElement.ownerDocument.querySelector('.notification')).toBeNull());
+  },
+};
+
+export const CloseOnClick: Story = {
+  render,
+  args: { closeOnClick: true, duration: 0 },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button'));
+    const toast = canvasElement.ownerDocument.querySelector<HTMLElement>('.notification')!;
+    await waitFor(() => expect(toast).toBeVisible());
+    await userEvent.click(toast);
+    await waitFor(() => expect(toast).not.toBeInTheDocument());
+  },
+};
+
+export const PermanentNotification: Story = {
+  render,
+  args: { duration: -1, closable: false },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button'));
+    const close = await within(canvasElement.ownerDocument.body).findByRole('button', { name: 'Close notification' });
+    await userEvent.click(close);
+    await waitFor(() => expect(canvasElement.ownerDocument.querySelector('.notification')).toBeNull());
+  },
+};
+
+export const HoverAndFocus: Story = {
+  render,
+  args: { pauseOnHover: true, duration: 1500 },
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole('button');
+    await userEvent.click(trigger);
+    const toast = canvasElement.ownerDocument.querySelector<HTMLElement>('.notification')!;
+    await userEvent.hover(toast);
+    await new Promise(resolve => setTimeout(resolve, 1600));
+    await expect(toast).toBeInTheDocument();
+    toast.focus();
+    await userEvent.unhover(toast);
+    await new Promise(resolve => setTimeout(resolve, 1600));
+    await expect(toast).toHaveFocus();
+    trigger.focus();
+    await waitFor(() => expect(toast).not.toBeInTheDocument(), { timeout: 2500 });
+  },
 };

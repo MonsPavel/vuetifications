@@ -1,12 +1,16 @@
 name: Release
 
+# Called by CI only after all checks pass, using the same commit and event context.
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
 
 jobs:
   release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -15,39 +19,44 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout
+      - name: Checkout checked commit
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-tags: true
 
+      - name: Skip superseded commits
+        id: checked-commit
+        env:
+          CHECKED_SHA: ${{ github.sha }}
+        run: |
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" = "$CHECKED_SHA" ]; then
+            git checkout -B main "$CHECKED_SHA"
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node.js
+        if: steps.checked-commit.outputs.current == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Force sync with remote
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch --all
-          git reset --hard origin/main
-          git clean -fd
+          registry-url: https://registry.npmjs.org
+          cache: npm
 
       - name: Install dependencies
+        if: steps.checked-commit.outputs.current == 'true'
         run: npm ci
 
       - name: Build package
+        if: steps.checked-commit.outputs.current == 'true'
         run: npm run build
 
-      - name: Setup npm authentication
-        run: |
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-
       - name: Release
+        if: steps.checked-commit.outputs.current == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
