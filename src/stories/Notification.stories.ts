@@ -142,6 +142,12 @@ export const Styles: Story = {
         >
           {{ button.label }}
         </button>
+        <button
+          class="storybook-btn"
+          @click="showLoading"
+        >
+          Loading
+        </button>
       </div>`,
     setup() {
       const show = (style: NotificationOptions['style']) => {
@@ -153,7 +159,10 @@ export const Styles: Story = {
           duration: 4000
         });
       };
-      return { styleButtons, show };
+      const showLoading = () => {
+        notify.loading({ message: 'Сборка идёт…' });
+      };
+      return { styleButtons, show, showLoading };
     }
   })
 };

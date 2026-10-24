@@ -14,10 +14,12 @@ const showCloseBtn = computed(() => (props.notification.closable || (props.notif
 // Стилевой пресет: у classic DOM остаётся прежним
 const isStyled = computed(() => !!props.notification.style && props.notification.style !== 'classic')
 
-// У edge таймер не показывается: кромка — статичный маркер типа
+// У edge таймер не показывается: кромка — статичный маркер типа.
+// При loading полосы тоже нет — процесс не имеет обратного отсчёта
 const hasTimer = computed(() => (
   isStyled.value
   && props.notification.style !== 'edge'
+  && !props.notification.loading
   && !!props.notification.duration
   && props.notification.duration > 0
 ))
@@ -68,7 +70,23 @@ const notificationClasses = computed(() => ([
     @keydown.escape="remove(notification.id)"
   >
     <span
-      v-if="isStyled && (styledGlyph || notification.icon)"
+      v-if="notification.loading"
+      class="notification__spinner"
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <path d="M12 2.5a9.5 9.5 0 1 1-9.5 9.5" />
+      </svg>
+    </span>
+
+    <span
+      v-else-if="isStyled && (styledGlyph || notification.icon)"
       class="notification__chip"
       aria-hidden="true"
     >

@@ -893,3 +893,75 @@
     box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6);
   }
 }
+
+/* ============================================================
+   Loading-состояние: спиннер вместо чипа/иконки/глифа.
+   Доступно во всех пресетах; в classic цвет кольца —
+   цвет текста типа (currentColor).
+   ============================================================ */
+
+@keyframes notification-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notification__spinner {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  width: 20px;
+  height: 20px;
+  /* classic не использует gap — отступ как у обычной иконки */
+  margin-right: 16px;
+  color: inherit;
+  animation: notification-spinner 0.8s linear infinite;
+}
+
+.notification__spinner svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* В пресетах горизонтальный зазор даёт gap контейнера */
+.notification--style-quiet .notification__spinner,
+.notification--style-edge .notification__spinner,
+.notification--style-tinted .notification__spinner,
+.notification--style-inverted .notification__spinner {
+  margin-right: 0;
+}
+
+/* quiet: спиннер в чипе с soft-подложкой */
+.notification--style-quiet .notification__spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--notification-style-soft);
+  color: var(--notification-style-acc);
+}
+
+/* tinted: круглая подложка в тоне акцента */
+.notification--style-tinted .notification__spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--notification-style-acc) 14%, transparent);
+  color: var(--notification-style-acc);
+}
+
+/* edge/inverted: «голое» кольцо цвета акцента */
+.notification--style-edge .notification__spinner,
+.notification--style-inverted .notification__spinner {
+  margin-top: 1px;
+  color: var(--notification-style-acc);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notification__spinner {
+    animation: none;
+    opacity: 0.5;
+  }
+}

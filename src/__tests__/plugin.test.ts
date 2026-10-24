@@ -103,3 +103,31 @@ describe('shortcuts', () => {
     expect(notifications.value).toHaveLength(0);
   });
 });
+
+describe('notify.loading', () => {
+  it('sets loading and defaults duration to 0 for a plain string', () => {
+    notify.loading('building');
+
+    expect(notifications.value[0]).toMatchObject({ message: 'building', loading: true, duration: 0 });
+  });
+
+  it('sets loading and defaults duration to 0 for options', () => {
+    notify.loading({ message: 'building', style: 'quiet' });
+
+    expect(notifications.value[0]).toMatchObject({ message: 'building', style: 'quiet', loading: true, duration: 0 });
+  });
+
+  it('keeps an explicit duration from the caller', () => {
+    notify.loading({ message: 'building', duration: 5000 });
+
+    expect(notifications.value[0]).toMatchObject({ loading: true, duration: 5000 });
+  });
+
+  it('returns a handle that closes the loading toast', () => {
+    const handle = notify.loading('working');
+
+    handle.close();
+
+    expect(notifications.value).toHaveLength(0);
+  });
+});

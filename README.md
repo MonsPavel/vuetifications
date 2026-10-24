@@ -183,6 +183,7 @@ prove that every message has finished being spoken.
 | `closeOnClick` | `boolean` | `false` | Close when the toast is clicked |
 | `pauseOnHover` | `boolean` | `false` | Pause while the pointer is over the toast |
 | `style`     | `'classic' \| 'quiet' \| 'edge' \| 'tinted' \| 'inverted'`                                 | `classic`     | Visual preset (see [Styles](#-styles))      |
+| `loading`   | `boolean`                                                                                  | `false`       | Spinner instead of the icon; hides the timer bar |
 
 ---
 
@@ -199,6 +200,22 @@ notify.info('A new update is available')
 notify.warning('Please check your input')
 notify.simple('A message without a built-in icon')
 
+// Loading: spinner instead of the icon, stays until closed
+notify.loading(options)
+
+```
+
+### ⏳ Loading (process toast)
+
+`notify.loading` shows a spinner instead of the icon and, by default, stays on screen (`duration: 0`) until you close it:
+
+```ts
+const handle = notify.loading({ message: 'Deploying…' })
+
+await deploy()
+
+handle.close()
+notify.success({ message: 'Deployed!' })
 ```
 
 ---

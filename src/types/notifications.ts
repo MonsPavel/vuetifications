@@ -27,6 +27,7 @@ export interface NotificationOptions {
   /** Pause auto-dismiss while hovered (default: false). */
   pauseOnHover?: boolean;
   style?: NotificationStyle;
+  loading?: boolean;
 }
 
 export interface Notification extends NotificationOptions {

@@ -29,4 +29,13 @@ notify.info = createShortcut('info')
 notify.warning = createShortcut('warning')
 notify.simple = createShortcut('simple')
 
+// Тост-процесс: спиннер вместо иконки; по умолчанию не исчезает сам
+notify.loading = (options: NotificationOptions | string): NotificationHandle => {
+  const normalized =
+    typeof options === 'string'
+      ? { message: options }
+      : options
+  return notify({ duration: 0, ...normalized, loading: true })
+}
+
 export { notify }
