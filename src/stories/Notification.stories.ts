@@ -20,7 +20,10 @@ const meta: Meta<NotificationOptions> = {
     position: 'top-right',
     animation: 'slide-fade',
     closable: true,
-    style: 'classic'
+    closeOnClick: false,
+    pauseOnHover: false,
+    style: 'classic',
+    loading: false
   },
   argTypes: {
     type: {
@@ -40,6 +43,7 @@ const meta: Meta<NotificationOptions> = {
     },
     closeOnClick: { control: { type: 'boolean' } },
     pauseOnHover: { control: { type: 'boolean' } },
+    loading: { control: { type: 'boolean' } },
     duration: {
       control: { type: 'number' },
     },

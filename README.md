@@ -16,6 +16,7 @@ You can try notifications in our [Storybook Demo](https://MonsPavel.github.io/vu
 ## ✨ Features
 
 - 🎨 Beautiful animations and themes (CSS variables)
+- 🖌️ Five style presets with full dark-mode support, plus a loading state
 - ⚡️ Quick integration with any Vue 3 project
 - 🧩 Simple API with `notify()` function
 - 🎛️ Positions, icons, duration customization
@@ -97,6 +98,7 @@ interface NotificationOptions {
   closeOnClick?: boolean             // default: false
   pauseOnHover?: boolean             // default: false
   style?: NotificationStyle         // default: 'classic'
+  loading?: boolean                  // default: false — spinner instead of the icon
 }
 
 interface NotificationHandle {
@@ -136,6 +138,29 @@ function dismissAllNotifications() {
 
 `remove(id)` ignores an already removed or unknown id. `clear()` closes all
 notifications in the shared store. Keep `notify` calls on the client in SSR apps.
+
+## Updating from 1.8
+
+The 1.9 additions are purely opt-in: `style` presets, `loading` toasts and the
+`notify.loading` shortcut. The default look (`classic`) does not change, so
+upgrading never alters what your users see.
+
+```ts
+import { notify } from 'vuetifications'
+
+notify({
+  message: 'Build published',
+  style: 'quiet',              // 'classic' | 'quiet' | 'edge' | 'tinted' | 'inverted'
+  type: 'success'
+})
+
+const handle = notify.loading({ message: 'Deploying…' }) // stays until closed
+handle.close()
+```
+
+Style presets keep their own interaction contract: `quiet`, `tinted` and
+`inverted` show a duration bar, `edge` shows none, and all of them pause on
+hover by default — no `pauseOnHover` opt-in required.
 
 ## Updating from 1.7
 
@@ -255,7 +280,7 @@ The `style` option picks a visual preset. The default is `classic` — the origi
 - `tinted` — the whole card washed in a light shade of the type color, colored title. The friendliest look, closest to the classic character.
 - `inverted` — constant dark surface in both themes with bright icons. Pops on light UIs.
 
-Every new style ships full dark-mode support for all types. `quiet`, `tinted` and `inverted` also show a visible duration bar that pauses on hover/focus; `edge` keeps its accent bar static and shows no timer.
+Every new style ships full dark-mode support for all types. `quiet`, `tinted` and `inverted` also show a visible duration bar that pauses on hover/focus; `edge` keeps its accent bar static and shows no timer. All presets pause on hover by default (classic requires the `pauseOnHover` opt-in), and the `loading` state replaces the icon with a spinner in every preset.
 
 ```ts
 notify({
@@ -346,7 +371,7 @@ container is mounted. Request-scoped stores are outside the 1.8 release.
 ### Troubleshooting
 
 - **No styling:** import `vuetifications/vuetifications.css` once in your app entry.
-- **Hover does not pause:** enable `pauseOnHover: true`; its default is `false`.
+- **Hover does not pause:** enable `pauseOnHover: true`; its default is `false` for `classic`. The styled presets (`quiet`, `edge`, `tinted`, `inverted`) always pause on hover.
 - **Click does not close:** enable `closeOnClick: true`, use the close button,
   or focus the notification and press Escape.
 - **Theme variables have no effect:** set them on `:root` or `body`, not only on
