@@ -1,3 +1,14 @@
+## [1.9.0](https://github.com/MonsPavel/vuetifications/compare/v1.8.0...v1.9.0) (2026-10-24)
+
+### Features
+
+* add loading notification state ([8d73848](https://github.com/MonsPavel/vuetifications/commit/8d7384824ce25afa6413186e436547b0c7e4e7d7))
+* add notification style presets ([6b9e848](https://github.com/MonsPavel/vuetifications/commit/6b9e84832584c1636c77facc85d14f4cb7940f64))
+
+### Bug Fixes
+
+* **deps:** pin dev vue to patched 3.5.x and bump source-map-js ([10f8450](https://github.com/MonsPavel/vuetifications/commit/10f8450cf32796191dce9caa96ef8ecb001266b1))
+
 ## [1.8.0](https://github.com/MonsPavel/vuetifications/compare/v1.7.0...v1.8.0) (2026-09-08)
 
 ### Features
