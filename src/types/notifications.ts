@@ -3,13 +3,15 @@ export type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'b
 
 export type AnimationPreset =
   | 'slide-fade'
-  | 'fade' 
-  | 'slide' 
-  | 'scale' 
+  | 'fade'
+  | 'slide'
+  | 'scale'
   | 'bounce'
   | 'flip'
   | 'zoom'
   | 'none';
+
+export type NotificationStyle = 'classic' | 'quiet' | 'edge' | 'tinted' | 'inverted';
 
 export interface NotificationOptions {
   title?: string;
@@ -24,6 +26,7 @@ export interface NotificationOptions {
   closeOnClick?: boolean;
   /** Pause auto-dismiss while hovered (default: false). */
   pauseOnHover?: boolean;
+  style?: NotificationStyle;
 }
 
 export interface Notification extends NotificationOptions {

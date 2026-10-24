@@ -19,7 +19,8 @@ const meta: Meta<NotificationOptions> = {
     duration: 3000,
     position: 'top-right',
     animation: 'slide-fade',
-    closable: true
+    closable: true,
+    style: 'classic'
   },
   argTypes: {
     type: {
@@ -47,6 +48,10 @@ const meta: Meta<NotificationOptions> = {
     },
     message: {
       control: { type: 'text' },
+    },
+    style: {
+      control: { type: 'radio' },
+      options: ['classic', 'quiet', 'edge', 'tinted', 'inverted'],
     },
   }
 };
@@ -115,4 +120,40 @@ export const HoverAndFocus: Story = {
     trigger.focus();
     await waitFor(() => expect(toast).not.toBeInTheDocument(), { timeout: 2500 });
   },
+};
+
+const styleButtons: Array<{ label: string; style: Required<NotificationOptions>['style'] }> = [
+  { label: 'Quiet', style: 'quiet' },
+  { label: 'Edge', style: 'edge' },
+  { label: 'Tinted', style: 'tinted' },
+  { label: 'Inverted', style: 'inverted' },
+  { label: 'Classic', style: 'classic' }
+];
+
+export const Styles: Story = {
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <button
+          v-for="button in styleButtons"
+          :key="button.style"
+          class="storybook-btn"
+          @click="show(button.style)"
+        >
+          {{ button.label }}
+        </button>
+      </div>`,
+    setup() {
+      const show = (style: NotificationOptions['style']) => {
+        notify({
+          style,
+          type: 'success',
+          title: 'Build published',
+          message: 'vuetifications is available on npm',
+          duration: 4000
+        });
+      };
+      return { styleButtons, show };
+    }
+  })
 };

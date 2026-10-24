@@ -83,6 +83,7 @@ function showNotification() {
 type NotificationType = 'success' | 'error' | 'info' | 'warning' | 'simple'
 type NotificationPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 type AnimationPreset = 'slide-fade' | 'fade'  | 'slide'  | 'scale' | 'bounce' | 'flip' | 'zoom' | 'none';
+type NotificationStyle = 'classic' | 'quiet' | 'edge' | 'tinted' | 'inverted'
 
 interface NotificationOptions {
   title?: string
@@ -95,6 +96,7 @@ interface NotificationOptions {
   animation?: AnimationPreset       // default: 'slide-fade'
   closeOnClick?: boolean             // default: false
   pauseOnHover?: boolean             // default: false
+  style?: NotificationStyle         // default: 'classic'
 }
 
 interface NotificationHandle {
@@ -180,6 +182,7 @@ prove that every message has finished being spoken.
 | `icon` | `string` | built-in SVG | Custom image URL |
 | `closeOnClick` | `boolean` | `false` | Close when the toast is clicked |
 | `pauseOnHover` | `boolean` | `false` | Pause while the pointer is over the toast |
+| `style`     | `'classic' \| 'quiet' \| 'edge' \| 'tinted' \| 'inverted'`                                 | `classic`     | Visual preset (see [Styles](#-styles))      |
 
 ---
 
@@ -220,6 +223,28 @@ notify({
   message: 'Bouncy notification!',
   type: 'info',
   animation: 'bounce'
+})
+```
+
+---
+
+## 🎨 Styles
+
+The `style` option picks a visual preset. The default is `classic` — the original look, frozen for backward compatibility: upgrading never changes what your users see.
+
+- `classic` — the original solid-fill look. Frozen compatibility preset: it receives no new features.
+- `quiet` — neutral surface, color kept in the icon chip and the timer bar. The recommended look for new projects.
+- `edge` — colored 3px left bar with a bare colored icon. Compact and strict; good for dense tools and panels.
+- `tinted` — the whole card washed in a light shade of the type color, colored title. The friendliest look, closest to the classic character.
+- `inverted` — constant dark surface in both themes with bright icons. Pops on light UIs.
+
+Every new style ships full dark-mode support for all types. `quiet`, `tinted` and `inverted` also show a visible duration bar that pauses on hover/focus; `edge` keeps its accent bar static and shows no timer.
+
+```ts
+notify({
+  message: 'Published!',
+  type: 'success',
+  style: 'quiet'
 })
 ```
 

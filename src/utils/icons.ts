@@ -15,6 +15,17 @@ const defaultIcons: Partial<Record<NotificationType, string>> = {
 
 export const getIcon = (type: NotificationType): string => defaultIcons[type] ?? ''
 
+const GLYPH_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+
+const styleIcons: Partial<Record<NotificationType, string>> = {
+  success: `<svg ${GLYPH_ATTRS}><path d="M20 6 9 17l-5-5"/></svg>`,
+  error: `<svg ${GLYPH_ATTRS}><path d="M18 6 6 18M6 6l12 12"/></svg>`,
+  warning: `<svg ${GLYPH_ATTRS}><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+  info: `<svg ${GLYPH_ATTRS}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+}
+
+// Inline-глифы для стилевых пресетов: цвет наследуется через currentColor
+export const getStyleIcon = (type: NotificationType): string => styleIcons[type] ?? ''
 
 // Keep the existing icon URLs in the store; render the same paths with inherited color.
 const iconPaths: Partial<Record<NotificationType, string[]>> = {

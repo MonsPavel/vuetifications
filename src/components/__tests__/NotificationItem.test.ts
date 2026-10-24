@@ -154,4 +154,14 @@ describe('NotificationItem', () => {
 
     vi.useRealTimers();
   });
+
+  it('keeps the classic dom free of style additions', () => {
+    const wrapper = mount(NotificationItem, {
+      props: { notification: baseNotification({ type: 'success', duration: 3000 }) }
+    });
+
+    expect(wrapper.classes().some(c => c.startsWith('notification--style-'))).toBe(false);
+    expect(wrapper.find('.notification__chip').exists()).toBe(false);
+    expect(wrapper.find('.notification__progress').exists()).toBe(false);
+  });
 });

@@ -325,3 +325,571 @@
     animation: none !important;
   }
 }
+
+/* ============================================================
+   Стилевые пресеты: quiet | edge | tinted | inverted.
+   Значения из design/notification-redesign.html.
+   Classic остаётся замороженным: блоки ниже применяются только
+   вместе с модификатором .notification--style-*.
+   ============================================================ */
+
+@keyframes notification-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Общие узлы новых пресетов: полоса таймера */
+.notification__progress {
+  position: absolute;
+  transform-origin: left;
+  animation: notification-progress linear forwards;
+}
+
+.notification__content {
+  min-width: 0;
+}
+
+/* ---------- quiet: нейтральная поверхность, чип иконки ---------- */
+
+.notification--style-quiet {
+  --notification-style-acc: var(--notification-style-info);
+  --notification-style-soft: rgba(62, 99, 221, 0.1);
+
+  align-items: flex-start;
+  gap: 12px;
+  width: 360px;
+  padding: 13px 40px 13px 14px;
+  border: 1px solid rgba(12, 17, 22, 0.08);
+  border-radius: 14px;
+  background: #fff;
+  color: #0c1116;
+  box-shadow:
+    0 1px 2px rgba(12, 17, 22, 0.05),
+    0 12px 32px -8px rgba(12, 17, 22, 0.16);
+}
+
+.notification--style-quiet.notification--success {
+  --notification-style-acc: var(--notification-style-success);
+  --notification-style-soft: rgba(23, 132, 90, 0.12);
+}
+
+.notification--style-quiet.notification--error {
+  --notification-style-acc: var(--notification-style-error);
+  --notification-style-soft: rgba(229, 72, 77, 0.1);
+}
+
+.notification--style-quiet.notification--warning {
+  --notification-style-acc: var(--notification-style-warning);
+  --notification-style-soft: rgba(232, 147, 12, 0.14);
+}
+
+.notification--style-quiet .notification__chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--notification-style-soft);
+  color: var(--notification-style-acc);
+}
+
+.notification--style-quiet .notification__chip svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.notification--style-quiet .notification__chip .notification__icon {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  align-self: auto;
+}
+
+.notification--style-quiet .notification__title {
+  font-size: 14.5px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 2px 0;
+}
+
+.notification--style-quiet .notification__message {
+  font-size: 13.5px;
+  line-height: 20px;
+  color: #5c6773;
+}
+
+.notification--style-quiet .notification__close {
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  opacity: 0.55;
+}
+
+.notification--style-quiet .notification__close:hover {
+  opacity: 1;
+  background: rgba(12, 17, 22, 0.1);
+}
+
+.notification--style-quiet .notification__close svg {
+  width: 15px;
+  height: 15px;
+}
+
+.notification--style-quiet .notification__progress {
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--notification-style-acc);
+}
+
+/* ---------- edge: цветная кромка, знак без подложки ---------- */
+
+.notification--style-edge {
+  --notification-style-acc: var(--notification-style-info);
+
+  align-items: flex-start;
+  gap: 10px;
+  width: 340px;
+  padding: 12px 30px 12px 17px;
+  border: 1px solid rgba(12, 17, 22, 0.1);
+  border-radius: 8px;
+  background: #fff;
+  color: #0c1116;
+  box-shadow: 0 4px 16px -4px rgba(12, 17, 22, 0.12);
+  overflow: hidden;
+}
+
+.notification--style-edge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--notification-style-acc);
+}
+
+.notification--style-edge.notification--success {
+  --notification-style-acc: var(--notification-style-success);
+}
+
+.notification--style-edge.notification--error {
+  --notification-style-acc: var(--notification-style-error);
+}
+
+.notification--style-edge.notification--warning {
+  --notification-style-acc: var(--notification-style-warning);
+}
+
+.notification--style-edge .notification__chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--notification-style-acc);
+}
+
+.notification--style-edge .notification__chip svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.notification--style-edge .notification__chip .notification__icon {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  align-self: auto;
+}
+
+.notification--style-edge .notification__title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 1px 0;
+}
+
+.notification--style-edge .notification__message {
+  font-size: 13px;
+  line-height: 19px;
+  color: #5c6773;
+}
+
+.notification--style-edge .notification__close {
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  opacity: 0.5;
+}
+
+.notification--style-edge .notification__close:hover {
+  opacity: 1;
+  background: rgba(12, 17, 22, 0.1);
+}
+
+.notification--style-edge .notification__close svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* У edge нет полосы таймера: кромка слева — статичный маркер типа */
+
+/* ---------- tinted: карточка в светлом тоне типа ---------- */
+
+.notification--style-tinted {
+  --notification-style-acc: var(--notification-style-info);
+  --notification-style-tint: #edf1fd;
+  --notification-style-deep: #2f4cb8;
+
+  align-items: flex-start;
+  gap: 12px;
+  width: 360px;
+  padding: 14px 40px 14px 16px;
+  border: 1px solid rgba(12, 17, 22, 0.04);
+  border-radius: 16px;
+  background: var(--notification-style-tint);
+  color: #171a1f;
+  box-shadow: 0 6px 20px -8px rgba(12, 17, 22, 0.1);
+}
+
+.notification--style-tinted.notification--success {
+  --notification-style-acc: var(--notification-style-success);
+  --notification-style-tint: #eaf6f0;
+  --notification-style-deep: #12603e;
+}
+
+.notification--style-tinted.notification--error {
+  --notification-style-acc: var(--notification-style-error);
+  --notification-style-tint: #fdedee;
+  --notification-style-deep: #9f3339;
+}
+
+.notification--style-tinted.notification--warning {
+  --notification-style-acc: var(--notification-style-warning);
+  --notification-style-tint: #fdf3e2;
+  --notification-style-deep: #7a4e08;
+}
+
+.notification--style-tinted.notification--simple {
+  --notification-style-acc: #5c6773;
+  --notification-style-tint: rgba(12, 17, 22, 0.05);
+  --notification-style-deep: #171a1f;
+}
+
+.notification--style-tinted .notification__chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--notification-style-acc);
+  color: #fff;
+}
+
+/* на янтарном круге знак тёмный — как текст warning в classic */
+.notification--style-tinted.notification--warning .notification__chip {
+  color: #171a1f;
+}
+
+.notification--style-tinted .notification__chip svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.notification--style-tinted .notification__chip .notification__icon {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  align-self: auto;
+}
+
+.notification--style-tinted .notification__title {
+  font-size: 14.5px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 2px 0;
+  color: var(--notification-style-deep);
+}
+
+.notification--style-tinted .notification__message {
+  font-size: 13.5px;
+  line-height: 20px;
+  color: #4d5964;
+}
+
+.notification--style-tinted .notification__close {
+  top: 9px;
+  right: 9px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  opacity: 0.5;
+}
+
+.notification--style-tinted .notification__close:hover {
+  opacity: 1;
+  background: rgba(12, 17, 22, 0.08);
+}
+
+.notification--style-tinted .notification__close svg {
+  width: 14px;
+  height: 14px;
+}
+
+.notification--style-tinted .notification__progress {
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--notification-style-acc);
+}
+
+/* ---------- inverted: константно тёмная поверхность ---------- */
+
+.notification--style-inverted {
+  --notification-style-acc: var(--notification-style-info-dark);
+
+  align-items: flex-start;
+  gap: 10px;
+  width: 360px;
+  padding: 12px 30px 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: #20242b;
+  color: #f5f7fa;
+  box-shadow: 0 8px 24px -6px rgba(12, 17, 22, 0.35);
+}
+
+.notification--style-inverted.notification--success {
+  --notification-style-acc: var(--notification-style-success-dark);
+}
+
+.notification--style-inverted.notification--error {
+  --notification-style-acc: var(--notification-style-error-dark);
+}
+
+.notification--style-inverted.notification--warning {
+  --notification-style-acc: var(--notification-style-warning-dark);
+}
+
+.notification--style-inverted .notification__chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--notification-style-acc);
+}
+
+.notification--style-inverted .notification__chip svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.notification--style-inverted .notification__chip .notification__icon {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  align-self: auto;
+}
+
+.notification--style-inverted .notification__title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 1px 0;
+}
+
+.notification--style-inverted .notification__message {
+  font-size: 13px;
+  line-height: 19px;
+  color: rgba(245, 247, 250, 0.64);
+}
+
+.notification--style-inverted .notification__close {
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  opacity: 0.5;
+}
+
+.notification--style-inverted .notification__close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.notification--style-inverted .notification__close svg {
+  width: 13px;
+  height: 13px;
+}
+
+.notification--style-inverted .notification__progress {
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--notification-style-acc);
+}
+
+/* ---------- семантика пресетов ---------- */
+
+:root {
+  --notification-style-success: #17845a;
+  --notification-style-error: #e5484d;
+  --notification-style-warning: #e8930c;
+  --notification-style-info: #3e63dd;
+
+  --notification-style-success-dark: #3dce8e;
+  --notification-style-error-dark: #ff6369;
+  --notification-style-warning-dark: #ffb224;
+  --notification-style-info-dark: #7d97f2;
+}
+
+@media (prefers-color-scheme: dark) {
+  .notification--style-quiet {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: #20242b;
+    color: #eef1f4;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 16px 40px -8px rgba(0, 0, 0, 0.5);
+  }
+
+  .notification--style-quiet.notification--success {
+    --notification-style-acc: var(--notification-style-success-dark);
+    --notification-style-soft: rgba(61, 206, 142, 0.16);
+  }
+
+  .notification--style-quiet.notification--error {
+    --notification-style-acc: var(--notification-style-error-dark);
+    --notification-style-soft: rgba(255, 99, 105, 0.14);
+  }
+
+  .notification--style-quiet.notification--warning {
+    --notification-style-acc: var(--notification-style-warning-dark);
+    --notification-style-soft: rgba(255, 178, 36, 0.16);
+  }
+
+  .notification--style-quiet.notification--info {
+    --notification-style-acc: var(--notification-style-info-dark);
+    --notification-style-soft: rgba(125, 151, 242, 0.14);
+  }
+
+  .notification--style-quiet .notification__message {
+    color: #9aa6b2;
+  }
+
+  .notification--style-quiet .notification__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .notification--style-edge {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: #20242b;
+    color: #eef1f4;
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+  }
+
+  .notification--style-edge.notification--success {
+    --notification-style-acc: var(--notification-style-success-dark);
+  }
+
+  .notification--style-edge.notification--error {
+    --notification-style-acc: var(--notification-style-error-dark);
+  }
+
+  .notification--style-edge.notification--warning {
+    --notification-style-acc: var(--notification-style-warning-dark);
+  }
+
+  .notification--style-edge.notification--info {
+    --notification-style-acc: var(--notification-style-info-dark);
+  }
+
+  .notification--style-edge .notification__message {
+    color: #9aa6b2;
+  }
+
+  .notification--style-edge .notification__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .notification--style-tinted {
+    border-color: rgba(255, 255, 255, 0.06);
+    color: #eef1f4;
+    box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.45);
+  }
+
+  .notification--style-tinted.notification--success {
+    --notification-style-acc: var(--notification-style-success-dark);
+    --notification-style-tint: rgba(61, 206, 142, 0.1);
+    --notification-style-deep: var(--notification-style-success-dark);
+  }
+
+  .notification--style-tinted.notification--error {
+    --notification-style-acc: var(--notification-style-error-dark);
+    --notification-style-tint: rgba(255, 99, 105, 0.1);
+    --notification-style-deep: var(--notification-style-error-dark);
+  }
+
+  .notification--style-tinted.notification--warning {
+    --notification-style-acc: var(--notification-style-warning-dark);
+    --notification-style-tint: rgba(255, 178, 36, 0.12);
+    --notification-style-deep: var(--notification-style-warning-dark);
+  }
+
+  .notification--style-tinted.notification--info {
+    --notification-style-acc: var(--notification-style-info-dark);
+    --notification-style-tint: rgba(125, 151, 242, 0.1);
+    --notification-style-deep: var(--notification-style-info-dark);
+  }
+
+  .notification--style-tinted.notification--simple {
+    --notification-style-acc: #9aa6b2;
+    --notification-style-tint: rgba(255, 255, 255, 0.06);
+    --notification-style-deep: #eef1f4;
+  }
+
+  .notification--style-tinted .notification__message {
+    color: #9aa6b2;
+  }
+
+  .notification--style-inverted {
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6);
+  }
+}

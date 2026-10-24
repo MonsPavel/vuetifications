@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { nextTick } from 'vue';
 
 import { notify } from '../plugin';
 import { notificationStore } from '../core/useNotifications';
@@ -68,6 +69,15 @@ describe('notify', () => {
 
     notify({ message: 'two' });
     expect(document.querySelectorAll('[data-vuetifications]')).toHaveLength(1);
+  });
+
+  it('passes the style through to the rendered item', async () => {
+    notify({ message: 'styled', style: 'quiet', duration: 0 });
+
+    await nextTick();
+
+    const item = document.querySelector('[data-vuetifications] .notification');
+    expect(item?.classList.contains('notification--style-quiet')).toBe(true);
   });
 });
 

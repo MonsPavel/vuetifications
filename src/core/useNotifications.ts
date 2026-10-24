@@ -35,7 +35,11 @@ export function useNotifications() {
       ...options
     };
 
-    if (!n.icon && n.type) {
+    // Для новых стилевых пресетов дефолтную URL-иконку не ставим:
+    // компонент рисует цветной inline-глиф, URL бы его перекрыл
+    const isStyled = n.style && n.style !== 'classic';
+
+    if (!n.icon && n.type && !isStyled) {
       n.icon = getIcon(n.type);
     }
 
